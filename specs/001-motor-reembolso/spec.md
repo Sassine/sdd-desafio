@@ -241,6 +241,22 @@ Cada regra abaixo recebe um identificador e será referenciada pelas tasks.
 **Justificativa:** dinheiro não tem subcentavos na prática; ROUND_HALF_UP é a convenção mais comum e previsível para arredondamento comercial.
 **Regra afetada:** RN-011
 
+### AMB-012 — Critério de prioridade quando múltiplas despesas excedem o limite do dia
+
+**Texto original do RH:** não define prioridade entre despesas que excedem o limite diário.
+**O que não está claro:** quando duas ou mais despesas do mesmo dia ultrapassam o limite, como decidir qual parte do limite é consumida primeiro?
+**Decisão:** a ordem de aparição no array de entrada determina a prioridade de consumo do limite, já que não há campo de horário.
+**Justificativa:** isso torna o comportamento determinístico e evita depender de um critério implícito ou não documentado.
+**Regra afetada:** RN-003
+
+### AMB-013 — Valor zero é ajuste ou despesa normal?
+
+**Texto original do RH:** não trata de valores zero.
+**O que não está claro:** um valor igual a zero deve ser tratado como ajuste, como despesa normal ou como caso indefinido?
+**Decisão:** valor zero não é tratado como ajuste; apenas valores negativos acionam RN-008.
+**Justificativa:** a regra explícita da spec fala em valores negativos como ajustes, e zero não é negativo.
+**Regra afetada:** RN-008
+
 ---
 
 ## 7. Casos de borda

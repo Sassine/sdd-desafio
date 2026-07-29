@@ -103,3 +103,19 @@ Cada entrada deve registrar:
 - **Motivo:** o teste de T-004 revelou que despesas comuns de transporte urbano não devem disparar limites ampliados apenas por palavras presentes na descrição ou fornecedor.
 - **Impacto na spec / tasks / testes:** afetou RN-005, AMB-004 e o comportamento de calcular_limite_diario.
 - **Decisão final:** a evidência de viagem é considerada apenas quando há uma despesa de categoria hospedagem no mesmo dia; despesas de outras categorias não passam a ser interpretadas como sinal de viagem.
+
+### DEC-011 — Critério de prioridade no consumo do limite diário
+
+- **Data:** 2026-07-29
+- **Resumo da mudança:** Definido o critério de prioridade para o consumo do limite diário quando múltiplas despesas excedem o limite do dia.
+- **Motivo:** a spec descreve reembolso parcial, mas não define como dividir o limite entre despesas do mesmo dia quando há mais de uma ocorrência acima do limite.
+- **Impacto na spec / tasks / testes:** afetou RN-003, AMB-012 e T-005.
+- **Decisão final:** a ordem de aparição no array de entrada define a prioridade de consumo do limite, já que não há campo de horário.
+
+### DEC-012 — Valor zero como ajuste ou despesa normal
+
+- **Data:** 2026-07-29
+- **Resumo da mudança:** Definido que valor zero não é tratado como ajuste.
+- **Motivo:** a spec menciona valores negativos como ajustes, mas não prevê explicitamente o caso de zero.
+- **Impacto na spec / tasks / testes:** afetou RN-008, AMB-013 e T-009.
+- **Decisão final:** valor zero é tratado como despesa normal; apenas valores negativos acionam RN-008.
