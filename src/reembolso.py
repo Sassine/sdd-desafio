@@ -70,6 +70,13 @@ def validar_categoria(despesa: Despesa) -> tuple[bool, str | None]:
     return False, "categoria_nao_politica"
 
 
+def validar_nota_fiscal(despesa: Despesa) -> tuple[bool, str | None]:
+    if despesa.valor_original > Decimal("100.00") and not despesa.tem_nota_fiscal:
+        return False, "nota_fiscal_obrigatoria"
+
+    return True, None
+
+
 def calcular_limite_diario(despesas: list[Despesa]) -> dict[str, Decimal]:
     limites = {
         "alimentacao": Decimal("60.00"),
