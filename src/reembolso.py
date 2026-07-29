@@ -107,6 +107,13 @@ def identificar_duplicatas(despesas: list[Despesa]) -> list[dict[str, object]]:
     return resultados
 
 
+def identificar_ajuste(despesa: Despesa) -> tuple[bool, str | None]:
+    if despesa.valor_original < Decimal("0.00"):
+        return True, "ajuste"
+
+    return False, None
+
+
 def calcular_limite_diario(despesas: list[Despesa]) -> dict[str, Decimal]:
     limites = {
         "alimentacao": Decimal("60.00"),
