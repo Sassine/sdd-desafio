@@ -95,3 +95,11 @@ Cada entrada deve registrar:
 - **Impacto na spec / tasks / testes:** spec.md ganhou RN-011/AMB-011; 
   tasks.md T-002 atualizada; novo teste de arredondamento em empate.
 - **Decisão final:** ROUND_HALF_UP, aplicado em normalizar_despesas.
+
+### DEC-010 — Evidência de viagem baseada em hospedagem
+
+- **Data:** 2026-07-29
+- **Resumo da mudança:** Corrigida a regra de inferência de viagem para evitar falsos positivos causados por termos como “hotel” ou “aeroporto” em despesas de outras categorias.
+- **Motivo:** o teste de T-004 revelou que despesas comuns de transporte urbano não devem disparar limites ampliados apenas por palavras presentes na descrição ou fornecedor.
+- **Impacto na spec / tasks / testes:** afetou RN-005, AMB-004 e o comportamento de calcular_limite_diario.
+- **Decisão final:** a evidência de viagem é considerada apenas quando há uma despesa de categoria hospedagem no mesmo dia; despesas de outras categorias não passam a ser interpretadas como sinal de viagem.
