@@ -83,3 +83,37 @@ def calcular_limite_diario(despesas: list[Despesa]) -> dict[str, Decimal]:
         limites["transporte_urbano"] = Decimal("120.00")
 
     return limites
+
+
+def calcular_reembolso_parcial(despesas: list[Despesa], limites: dict[str, Decimal]) -> list[dict[str, Decimal]]:
+    if not despesas:
+        return []
+
+    categoria = despesas[0].categoria
+    limite_categoria = limites.get(categoria, Decimal("0.00"))
+    saldo_restante = limite_categoria
+    resultados: list[dict[str, Decimal]] = []
+
+    for despesa in despesas:
+        valor = despesa.valor_original
+
+        if valor <= Decimal("0.00"):
+            reembolsavel = Decimal("0.00")
+            nao_reembolsavel = Decimal("0.00")
+        elif valor <= saldo_restante:
+            reembolsavel = valor
+            nao_reembolsavel = Decimal("0.00")
+            saldo_restante -= valor
+        else:
+            reembolsavel = saldo_restante
+            nao_reembolsavel = valor - saldo_restante
+            saldo_restante = Decimal("0.00")
+
+        resultados.append(
+            {
+                "valor_reembolsavel": reembolsavel,
+                "valor_nao_reembolsavel": nao_reembolsavel,
+            }
+        )
+
+    return resultados
