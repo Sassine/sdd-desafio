@@ -77,6 +77,13 @@ def validar_nota_fiscal(despesa: Despesa) -> tuple[bool, str | None]:
     return True, None
 
 
+def validar_periodo(despesa: Despesa, periodo_inicio: str, periodo_fim: str) -> tuple[bool, str | None]:
+    if periodo_inicio <= despesa.data <= periodo_fim:
+        return True, None
+
+    return False, "fora_do_periodo"
+
+
 def calcular_limite_diario(despesas: list[Despesa]) -> dict[str, Decimal]:
     limites = {
         "alimentacao": Decimal("60.00"),
