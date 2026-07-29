@@ -12,7 +12,7 @@
   - **Commit:** `<preencher depois>`
 
 - [ ] **T-002** — Normalizar categorias, datas e valores para um formato interno consistente.
-  - **Atende:** RN-009
+  - **Atende:** RN-009, RN-011
   - **Aceite:** o teste test_normalizacao_de_categoria_e_data_passa.
   - **Commit:** `<preencher depois>`
 
@@ -89,4 +89,5 @@
 | RN-007 | T-008 | test_duplicatas_sao_recusadas |
 | RN-008 | T-009 | test_valores_negativos_sao_ignorados |
 | RN-009 | T-001, T-002 | test_normalizacao_de_categoria_e_data |
+| RN-011 | T-002 | test_normalizacao_arredonda_half_up_em_caso_de_empate |
 | RN-010 | T-010 | test_saida_json_com_resumo_e_justificativas |
