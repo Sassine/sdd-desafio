@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
-from typing import Any
 
 
 @dataclass(frozen=True)
@@ -40,3 +39,23 @@ def carregar_despesas(caminho: str | Path) -> list[Despesa]:
         )
 
     return despesas
+
+
+def normalizar_despesas(despesas: list[Despesa]) -> list[Despesa]:
+    normalizadas: list[Despesa] = []
+
+    for despesa in despesas:
+        valor_normalizado = despesa.valor_original.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        normalizadas.append(
+            Despesa(
+                id=despesa.id,
+                data=despesa.data,
+                categoria=despesa.categoria.lower(),
+                descricao=despesa.descricao,
+                fornecedor=despesa.fornecedor,
+                valor_original=valor_normalizado,
+                tem_nota_fiscal=despesa.tem_nota_fiscal,
+            )
+        )
+
+    return normalizadas
