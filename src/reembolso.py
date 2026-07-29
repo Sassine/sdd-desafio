@@ -59,3 +59,12 @@ def normalizar_despesas(despesas: list[Despesa]) -> list[Despesa]:
         )
 
     return normalizadas
+
+
+def validar_categoria(despesa: Despesa) -> tuple[bool, str | None]:
+    categorias_aceitas = {"alimentacao", "transporte_urbano", "hospedagem"}
+
+    if despesa.categoria in categorias_aceitas:
+        return True, None
+
+    return False, "categoria_nao_politica"
