@@ -149,6 +149,12 @@ Cada regra abaixo recebe um identificador e será referenciada pelas tasks.
 **Origem:** interpretação definida por esta spec (a política do RH não prevê o caso).
 **Aceite:** uma despesa com valor 33.333 deve ser normalizada para 33.33.
 
+### RN-012 — Limite diário de hospedagem
+
+**Regra:** Hospedagem tem limite de R$ 250,00 por diária. Sem um campo estruturado de número de diárias na entrada, cada despesa de hospedagem é avaliada como 1 diária (conforme decisão em AMB-010) e o limite de R$ 250,00 é aplicado à despesa individualmente — sem agregação por dia, diferente de alimentação e transporte urbano.
+**Origem:** política do RH, item 3.
+**Aceite:** uma despesa de hospedagem de R$ 480,00 deve resultar em R$ 250,00 reembolsável e R$ 230,00 não reembolsável.
+
 ---
 
 ## 6. Ambiguidades identificadas e decisões
@@ -231,7 +237,7 @@ Cada regra abaixo recebe um identificador e será referenciada pelas tasks.
 **O que não está claro:** a entrada traz um valor total, mas não informa diretamente a quantidade de noites.
 **Decisão:** a quantidade de diárias é inferida quando a descrição menciona explicitamente “diarias” ou “noites”; se não houver indicação, considera-se 1 diária. O limite é aplicado à quantidade de diárias inferida para a despesa, e não a todo o período ou a outros dias.
 **Justificativa:** isso deixa a regra operacional sem exigir um novo campo de entrada e limita o efeito do cálculo ao contexto da despesa.
-**Regra afetada:** RN-005, RN-002
+**Regra afetada:** RN-012
 
 ### AMB-011 — Precisão decimal do valor da despesa
 
@@ -265,6 +271,7 @@ Cada regra abaixo recebe um identificador e será referenciada pelas tasks.
 |---|---|---|---|
 | Categoria desconhecida | coworking | status não reembolsável | RN-001 |
 | Limite diário excedido | alimentação com dois itens no mesmo dia | primeiro valor até o limite; excedente não reembolsável | RN-002, RN-003 |
+| Limite de hospedagem | despesa de hospedagem de 480,00 | status parcialmente reembolsada com R$ 250,00 reembolsável e R$ 230,00 não reembolsável | RN-012 |
 | Valor acima de 100 sem nota fiscal | 100,01 sem nota | status recusada | RN-004 |
 | Valor exatamente 100 sem nota fiscal | 100,00 sem nota | reembolsável se não houver outro impedimento | RN-004 |
 | Despesa fora do período | data em abril | status ignorada | RN-006 |
