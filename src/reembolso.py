@@ -68,3 +68,18 @@ def validar_categoria(despesa: Despesa) -> tuple[bool, str | None]:
         return True, None
 
     return False, "categoria_nao_politica"
+
+
+def calcular_limite_diario(despesas: list[Despesa]) -> dict[str, Decimal]:
+    limites = {
+        "alimentacao": Decimal("60.00"),
+        "transporte_urbano": Decimal("80.00"),
+    }
+
+    tem_evidencia_viagem = any(despesa.categoria == "hospedagem" for despesa in despesas)
+
+    if tem_evidencia_viagem:
+        limites["alimentacao"] = Decimal("90.00")
+        limites["transporte_urbano"] = Decimal("120.00")
+
+    return limites
