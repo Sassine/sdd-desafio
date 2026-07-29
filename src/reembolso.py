@@ -84,6 +84,29 @@ def validar_periodo(despesa: Despesa, periodo_inicio: str, periodo_fim: str) -> 
     return False, "fora_do_periodo"
 
 
+def identificar_duplicatas(despesas: list[Despesa]) -> list[dict[str, object]]:
+    vistos: dict[tuple[str, str, str, str, Decimal], str] = {}
+    resultados: list[dict[str, object]] = []
+
+    for despesa in despesas:
+        chave = (
+            despesa.data,
+            despesa.categoria,
+            despesa.fornecedor,
+            despesa.descricao,
+            despesa.valor_original,
+        )
+
+        if chave in vistos:
+            motivo = f"duplicata_de_{vistos[chave]}"
+            resultados.append({"id": despesa.id, "duplicata": True, "motivo": motivo})
+        else:
+            vistos[chave] = despesa.id
+            resultados.append({"id": despesa.id, "duplicata": False, "motivo": None})
+
+    return resultados
+
+
 def calcular_limite_diario(despesas: list[Despesa]) -> dict[str, Decimal]:
     limites = {
         "alimentacao": Decimal("60.00"),
