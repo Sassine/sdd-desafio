@@ -45,6 +45,8 @@ A execução também terá um contexto que carrega:
 - limite diário efetivo por categoria;
 - lista de despesas já processadas para detectar duplicatas.
 
+> Nota de escopo: a função de leitura de despesas da T-001 retorna apenas a lista de despesas do JSON de entrada. Os dados de colaborador e período serão capturados na T-010, na etapa de montagem da saída, sem expandir o escopo da leitura inicial.
+
 ## 4. Como a política é representada
 
 A política será representada como constantes e regras explícitas no código, em um módulo dedicado de regras. Isso reduz o risco de espalhar a lógica por várias funções e facilita mudanças futuras.
