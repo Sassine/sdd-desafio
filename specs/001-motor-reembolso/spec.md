@@ -109,9 +109,9 @@ Cada regra abaixo recebe um identificador e será referenciada pelas tasks.
 
 ### RN-005 — Limites ampliados em viagem
 
-**Regra:** A condição de viagem é inferida de forma heurística, apenas a partir de termos presentes na descrição da despesa ou no fornecedor, como hotel, aeroporto, airbnb, viagem ou traslado. Essa inferência é aplicada por dia: uma evidência encontrada em uma despesa do dia D só altera os limites do dia D para as categorias de alimentação e transporte urbano. Se não houver evidência explícita, o limite padrão é mantido. A regra é deliberadamente simples e pode ser revisada no futuro.
+**Regra:** A condição de viagem é inferida de forma heurística apenas quando há uma despesa de categoria hospedagem no mesmo dia da despesa analisada. Quando isso ocorre, os limites de alimentação e transporte urbano do dia passam a ser R$ 90,00 e R$ 120,00, respectivamente. Despesas de outras categorias não são usadas como sinal de viagem.
 **Origem:** política do RH, item 6.
-**Aceite:** uma despesa de alimentação em um dia com evidência de viagem deve ter limite de R$ 90,00 em vez de R$ 60,00, enquanto um dia sem evidência segue o limite padrão.
+**Aceite:** uma despesa de alimentação em um dia com uma despesa de hospedagem deve ter limite de R$ 90,00 em vez de R$ 60,00, enquanto um dia sem hospedagem segue o limite padrão.
 
 ### RN-006 — Período de competência
 
@@ -181,8 +181,8 @@ Cada regra abaixo recebe um identificador e será referenciada pelas tasks.
 
 **Texto original do RH:** “Colaborador em viagem tem limites ampliados em 50%”.
 **O que não está claro:** não existe campo na entrada para indicar isso diretamente.
-**Decisão:** o sistema considera o colaborador em viagem apenas quando há evidência explícita de viagem na descrição ou no fornecedor, e essa evidência é avaliada para o mesmo dia da despesa. Se houver dúvida ou ausência de sinal, a regra não cria uma condição de viagem.
-**Justificativa:** essa abordagem é mais precisa que assumir viagem para todo o período e deixa explícita a fragilidade da inferência.
+**Decisão:** o sistema considera o colaborador em viagem apenas quando há uma despesa de categoria hospedagem no mesmo dia da despesa analisada. Despesas de outras categorias não são usadas como sinal de viagem, mesmo quando contêm termos como hotel ou aeroporto. Se não houver hospedagem no dia, a regra não cria uma condição de viagem.
+**Justificativa:** essa abordagem é mais precisa que assumir viagem para todo o período e evita falsos positivos causados por palavras isoladas em outras categorias.
 **Regra afetada:** RN-005
 
 ### AMB-005 — O que conta como duplicata?
