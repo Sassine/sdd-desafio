@@ -143,6 +143,12 @@ Cada regra abaixo recebe um identificador e será referenciada pelas tasks.
 **Origem:** necessidade de rastreabilidade operacional.
 **Aceite:** toda despesa do resultado deve conter o campo justificativa.
 
+### RN-011 — Precisão de valores monetários
+
+**Regra:** Valores de despesa com mais de duas casas decimais são arredondados para duas casas (ROUND_HALF_UP) durante a normalização, antes de qualquer cálculo de limite ou reembolso.
+**Origem:** interpretação definida por esta spec (a política do RH não prevê o caso).
+**Aceite:** uma despesa com valor 33.333 deve ser normalizada para 33.33.
+
 ---
 
 ## 6. Ambiguidades identificadas e decisões
@@ -226,6 +232,14 @@ Cada regra abaixo recebe um identificador e será referenciada pelas tasks.
 **Decisão:** a quantidade de diárias é inferida quando a descrição menciona explicitamente “diarias” ou “noites”; se não houver indicação, considera-se 1 diária. O limite é aplicado à quantidade de diárias inferida para a despesa, e não a todo o período ou a outros dias.
 **Justificativa:** isso deixa a regra operacional sem exigir um novo campo de entrada e limita o efeito do cálculo ao contexto da despesa.
 **Regra afetada:** RN-005, RN-002
+
+### AMB-011 — Precisão decimal do valor da despesa
+
+**Texto original do RH:** não especifica precisão monetária.
+**O que não está claro:** valores com mais de duas casas decimais (ex: 33.333) não têm tratamento definido — a política assume implicitamente que dinheiro tem no máximo 2 casas.
+**Decisão:** valores são arredondados para 2 casas decimais usando ROUND_HALF_UP durante a normalização.
+**Justificativa:** dinheiro não tem subcentavos na prática; ROUND_HALF_UP é a convenção mais comum e previsível para arredondamento comercial.
+**Regra afetada:** RN-011
 
 ---
 
