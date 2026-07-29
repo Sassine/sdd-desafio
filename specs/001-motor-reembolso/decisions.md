@@ -83,3 +83,15 @@ Cada entrada deve registrar:
 - **Motivo:** reduzir a granularidade e manter rastreabilidade 1:1 entre commit e regra de negócio.
 - **Impacto na spec / tasks / testes:** afetou o plano de execução e a organização das tasks em T-007, T-008 e T-009.
 - **Decisão final:** o tratamento de despesas fora do período ficou em T-007, duplicatas em T-008 e valores negativos em T-009.
+
+### DEC-009 — Precisão de valores monetários
+
+- **Data:** 2026-07-29
+- **Resumo da mudança:** Adicionada RN-011/AMB-011 definindo arredondamento 
+  para 2 casas decimais (ROUND_HALF_UP) durante a normalização.
+- **Motivo:** o JSON de exemplo contém uma despesa com 3 casas decimais 
+  (33.333), caso não previsto pela política do RH; a implementação da 
+  T-002 já precisava dessa regra para não propagar sujeira de dado.
+- **Impacto na spec / tasks / testes:** spec.md ganhou RN-011/AMB-011; 
+  tasks.md T-002 atualizada; novo teste de arredondamento em empate.
+- **Decisão final:** ROUND_HALF_UP, aplicado em normalizar_despesas.
