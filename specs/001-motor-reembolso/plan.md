@@ -80,6 +80,13 @@ A estrutura sugerida é:
 **Alternativa descartada:** acoplar toda a lógica à execução do terminal.
 **Consequência:** a lógica pode ser testada de forma independente da interface.
 
+### DT-004 — Serialização de Decimal como float na saída JSON
+
+**Contexto:** JSON não tem suporte nativo a Decimal; o resultado precisa ser serializável.
+**Decisão:** converter Decimal para float apenas no limite de saída (serialização), mantendo Decimal em todos os cálculos internos.
+**Alternativa descartada:** serializar como string, o que preservaria precisão exata mas quebraria a leitura do JSON como número em ferramentas consumidoras (ex: planilhas, outros sistemas).
+**Consequência:** como os valores já são arredondados para 2 casas antes da serialização (RN-011), o risco de imprecisão de float é desprezível nesta faixa de valores monetários.
+
 ## 6. Estratégia de testes
 
 - **Nível:** testes unitários para cada regra e testes de integração para o fluxo completo da CLI.
