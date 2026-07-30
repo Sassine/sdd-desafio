@@ -8,6 +8,7 @@ onde `None` significa "não decidi, siga para a próxima". `normalizar_categoria
 from dataclasses import replace
 from decimal import Decimal
 
+from src.motor import politica
 from src.motor.modelo import Contexto, Despesa, Parecer, Status
 
 ZERO = Decimal("0.00")
@@ -33,4 +34,17 @@ def rn_003_competencia(despesa: Despesa, contexto: Contexto) -> Parecer | None:
         justificativa=(
             f"Despesa fora do periodo de competencia {contexto.competencia}."
         ),
+    )
+
+
+def rn_001_categoria_coberta(despesa: Despesa, contexto: Contexto) -> Parecer | None:
+    """RN-001 — categoria fora da política é recusada, mas permanece no resultado."""
+    if despesa.categoria in politica.CATEGORIAS_COBERTAS:
+        return None
+    return Parecer(
+        despesa=despesa,
+        valor_reembolsavel=ZERO,
+        status=Status.RECUSADA,
+        regras_aplicadas=("RN-001",),
+        justificativa=f"Categoria '{despesa.categoria}' nao e coberta pela politica de reembolso.",
     )

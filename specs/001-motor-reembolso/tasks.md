@@ -54,10 +54,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_rn_003_despesa_fora_da_competencia_e_recusada` — data `2026-04-15` com competência `2026-07` resulta em `0.00`, status `recusada`, presente na lista de itens
   - **Commit:** `pendente`
 
-- [ ] **T-008** — RN-001: categoria fora da política é recusada e permanece no resultado
+- [x] **T-008** — RN-001: categoria fora da política é recusada e permanece no resultado
   - **Atende:** RN-001
   - **Aceite:** `test_rn_001_categoria_fora_da_politica_e_recusada` — `coworking` de R$ 89,00 resulta em `0.00`, status `recusada`
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-009** — RN-004: duplicatas — primeira ocorrência paga, demais recusadas
   - **Atende:** RN-004, AMB-008
