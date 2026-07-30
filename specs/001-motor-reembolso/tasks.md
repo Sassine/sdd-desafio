@@ -67,11 +67,66 @@
   - **Aceite:** testes em `tests/test_cli.py` (`test_cli_gera_arquivo_json_valido`, `test_cli_serializa_decimals_como_numeros`, `test_cli_sem_argumentos_necessarios_falha_com_mensagem_clara`).
   - **Commit:** `feat(T-011): implementa CLI calcular --input --output`
 
-## Fase 5 — Envelope (Dia 2)
+## Fase 5 — Envelope (Dia 2, Política v4)
 
-- [ ] **T-012** — Ajustar o motor para absorver uma mudança de requisito sem reescrever a lógica principal.
-  - **Atende:** evolução da spec
-  - **Aceite:** o teste de regressão da mudança de requisito passa.
+> Contexto: comunicado do RH em 2026-07-30 trouxe a política v4, que
+> substitui limites constantes por uma tabela externa por centro de
+> custo (politica-v4.json), adiciona a categoria representacao,
+> exclui hospedagem do CC-ENG-PLATAFORMA, e introduz despesas em
+> moeda estrangeira convertidas via cambio.json. Ver DEC-013 a
+> DEC-016 em decisions.md e RN-013 a RN-017 / AMB-014 a AMB-016 em
+> spec.md.
+
+- [ ] **T-012** — *(título da fase — sem entrega própria; ver T-013 a T-018 abaixo)*
+
+- [ ] **T-013** — Implementar leitura da política externa (politica-v4.json) com fallback por categoria.
+  - **Atende:** RN-013, AMB-014
+  - **Aceite:** função que recebe centro de custo + categoria e devolve
+    o limite aplicável, testada com: CC-COMERCIAL/alimentacao (usa valor
+    específico), CC-ADM/hospedagem (cai no padrão só nessa categoria),
+    CC-SUPORTE-N2/qualquer categoria (centro de custo ausente da
+    tabela, usa padrão inteiro).
+  - **Commit:** `<preencher depois>`
+
+- [ ] **T-014** — Suportar a categoria "representacao" como categoria válida condicional ao centro de custo.
+  - **Atende:** RN-014, AMB-015
+  - **Aceite:** despesa e-001 (representacao, CC-COMERCIAL) é aceita e
+    avaliada contra limite de R$300/dia, agregado por dia como as
+    demais categorias; a mesma categoria em um centro de custo sem
+    essa entrada é recusada como categoria_nao_politica.
+  - **Commit:** `<preencher depois>`
+
+- [ ] **T-015** — Tratar categoria com limite zero como não reembolsável no centro de custo.
+  - **Atende:** RN-015
+  - **Aceite:** despesa sintética de hospedagem no CC-ENG-PLATAFORMA
+    (nenhuma existe no dataset fornecido) resulta em status recusada,
+    motivo categoria_nao_reembolsavel_no_centro_custo — não
+    parcialmente_reembolsada com valor zero.
+  - **Commit:** `<preencher depois>`
+
+- [ ] **T-016** — Implementar conversão de moeda estrangeira usando taxa da data da despesa, com fallback para último dia útil anterior.
+  - **Atende:** RN-016, RN-017, AMB-016
+  - **Aceite:** e-002 (EUR 22,00, 2026-07-14, taxa 5,93) converte para
+    R$130,46; e-004 (EUR 30,00, 2026-07-18, sábado sem cotação) usa a
+    taxa de 2026-07-17 (5,96) por fallback; e-010 (sem campo moeda) é
+    tratada como BRL sem conversão.
+  - **Commit:** `<preencher depois>`
+
+- [ ] **T-017** — Integrar política externa, representação, exclusão por centro de custo e câmbio no pipeline `processar_despesas`.
+  - **Atende:** RN-013 a RN-017 (orquestração)
+  - **Aceite:** rodar a CLI com despesas-envelope.json e
+    despesas-envelope-cc-desconhecido.json produz resultados
+    consistentes com todas as regras acima, mantendo o comportamento
+    das RN-001 a RN-012 para os casos que não mudaram (nota fiscal,
+    duplicata, período continuam funcionando como antes).
+  - **Commit:** `<preencher depois>`
+
+- [ ] **T-018** *(opcional — item C do comunicado)* — Implementar fila de aprovação manual para valor reembolsável acima de R$500.
+  - **Atende:** item C do comunicado (opcional — não pontua ausência,
+    mas pode prejudicar se deixar a spec inconsistente)
+  - **Aceite:** despesa com valor_reembolsavel > R$500 recebe status
+    pendente_aprovacao em vez de reembolsada; resumo do JSON de saída
+    ganha uma contagem quantidade_pendente_aprovacao.
   - **Commit:** `<preencher depois>`
 
 ---
@@ -92,3 +147,8 @@
 | RN-010 | T-010 | `test_todas_as_despesas_tem_justificativa_preenchida` |
 | RN-011 | T-002 | `test_normalizacao_arredonda_half_up_em_caso_de_empate` |
 | RN-012 | T-010 | `test_hospedagem_aplica_limite_individual_de_250_reais` |
+| RN-013 | T-013 | *(a definir na implementação)* |
+| RN-014 | T-014 | *(a definir na implementação)* |
+| RN-015 | T-015 | *(a definir na implementação)* |
+| RN-016 | T-016 | *(a definir na implementação)* |
+| RN-017 | T-016 | *(a definir na implementação)* |
