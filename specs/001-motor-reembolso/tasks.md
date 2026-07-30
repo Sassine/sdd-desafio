@@ -25,10 +25,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_modelo_e_imutavel` — tentar atribuir a um campo de `Despesa` levanta `FrozenInstanceError`; `Resultado.total_reembolsavel` é propriedade calculada, não campo
   - **Commit:** `pendente`
 
-- [ ] **T-003** — Carregador: JSON → `Solicitacao`, com `parse_float=Decimal` e arredondamento único de duas casas meio-para-cima
+- [x] **T-003** — Carregador: JSON → `Solicitacao`, com `parse_float=Decimal` e arredondamento único de duas casas meio-para-cima
   - **Atende:** RN-010, AMB-011, `spec.md` §4 (entrada)
   - **Aceite:** `test_rn_010_arredonda_na_leitura` — `33.333` vira exatamente `Decimal("33.33")`, e o valor nunca passa por `float`
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-004** — Validação de entrada: campo obrigatório ausente ou tipo inválido rejeita a execução com mensagem nomeando o campo
   - **Atende:** `spec.md` §9 (último critério), §3 (não adivinha entrada malformada)
