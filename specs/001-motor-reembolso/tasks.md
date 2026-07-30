@@ -20,10 +20,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `pytest` coleta e executa ao menos 1 teste, saída verde
   - **Commit:** `pendente`
 
-- [ ] **T-002** — Modelo de dados imutável: `Despesa`, `Solicitacao`, `Contexto`, `Parecer`, `Resultado`, enum `Status`
+- [x] **T-002** — Modelo de dados imutável: `Despesa`, `Solicitacao`, `Contexto`, `Parecer`, `Resultado`, enum `Status`
   - **Atende:** `plan.md` §3
   - **Aceite:** `test_modelo_e_imutavel` — tentar atribuir a um campo de `Despesa` levanta `FrozenInstanceError`; `Resultado.total_reembolsavel` é propriedade calculada, não campo
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-003** — Carregador: JSON → `Solicitacao`, com `parse_float=Decimal` e arredondamento único de duas casas meio-para-cima
   - **Atende:** RN-010, AMB-011, `spec.md` §4 (entrada)
