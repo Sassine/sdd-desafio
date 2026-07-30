@@ -44,10 +44,10 @@ a ordem de aplicação da spec §8.
 
 > Uma task por RN, na ordem dos passos da spec §8. Cada uma entra com o seu teste.
 
-- [ ] **T-006** — RN-002: normalização da categoria (caixa e espaços nas pontas)
+- [x] **T-006** — RN-002: normalização da categoria (caixa e espaços nas pontas)
   - **Atende:** RN-002, AMB-012
   - **Aceite:** `test_rn_002_categoria_em_caixa_alta_e_normalizada` — `"ALIMENTACAO"` é tratada como `alimentacao` e a categoria normalizada é a que sai no resultado
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-007** — RN-003: competência — despesa fora do mês é recusada e permanece no resultado
   - **Atende:** RN-003, AMB-009
