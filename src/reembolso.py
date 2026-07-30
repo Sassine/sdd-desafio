@@ -366,3 +366,24 @@ def processar_despesas(payload: dict[str, object] | str | Path) -> dict[str, obj
         "resumo": resumo,
         "despesas": resultado_despesas,
     }
+
+def carregar_politica(caminho: str | Path) -> dict:
+    path = Path(caminho)
+    with path.open("r", encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+def obter_limite_categoria(
+    politica: dict, centro_custo: str, categoria: str
+) -> Decimal | None:
+    centros_custo = politica.get("centros_custo", {})
+    tabela_especifica = centros_custo.get(centro_custo, {})
+
+    if categoria in tabela_especifica:
+        return Decimal(str(tabela_especifica[categoria]["limite"]))
+
+    tabela_padrao = politica.get("padrao", {})
+    if categoria in tabela_padrao:
+        return Decimal(str(tabela_padrao[categoria]["limite"]))
+
+    return None
