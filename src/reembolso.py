@@ -387,3 +387,13 @@ def obter_limite_categoria(
         return Decimal(str(tabela_padrao[categoria]["limite"]))
 
     return None
+
+def validar_categoria_por_politica(
+    despesa: Despesa, centro_custo: str, politica: dict
+) -> tuple[bool, str | None]:
+    limite = obter_limite_categoria(politica, centro_custo, despesa.categoria)
+
+    if limite is None:
+        return False, "categoria_nao_politica"
+
+    return True, None
