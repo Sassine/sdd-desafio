@@ -18,7 +18,7 @@
 | `CLAUDE.md`, `README.md` | preenchidos | `ac6b65d` |
 | `specs/001-motor-reembolso/DECISIONS.md` | vazio **de propósito** — spec 1.0 é a linha de base | — |
 | `src/`, `tests/` | não existem — a manhã é sem código, por cronograma | — |
-| `docs/sessions/` | 2 sessões exportadas em `.jsonl` cru + `.md` legível | `<este>` |
+| `docs/sessions/` | 2 sessões exportadas em `.jsonl` cru + `.md` legível | `a355a2c` |
 
 Números de referência já verificados contra `exemplos/despesas-exemplo.json`:
 **total lançado R$ 1.816,84 · total reembolsável R$ 703,43**. Estão fixados como
