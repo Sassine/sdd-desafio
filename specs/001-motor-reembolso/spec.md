@@ -1,6 +1,6 @@
 # Spec — Motor de Cálculo de Reembolso
 
-**Versão:** 1.0 · **Status:** em desenvolvimento · **Última alteração:** 2026-07-30
+**Versão:** 1.1 · **Status:** em desenvolvimento · **Última alteração:** 2026-07-30
 
 > **Regra de ouro deste arquivo:** ele descreve o QUÊ e o PORQUÊ. Nenhuma linha
 > aqui pode citar linguagem, biblioteca, classe, função ou estrutura de pasta.
@@ -23,7 +23,7 @@ Quando o sistema processa um conjunto de despesas, ele deve indicar, para cada i
 
 - Não realiza pagamento, emissão de boleto, transferência ou integração com contabilidade.
 - Não calcula impostos, taxas, juros ou descontos financeiros.
-- Não inferirá status de viagem a partir de dados indiretos; a entrada atual não possui campo explícito de viagem, portanto todas as despesas são tratadas como não em viagem.
+- Não há campo explícito de viagem na entrada; por isso, o sistema considera como em viagem qualquer dia que tenha uma hospedagem associada, inferindo esse status a partir da própria entrada.
 - Não reclassifica categorias fora da política; categorias diferentes de alimentação, transporte urbano e hospedagem não são reembolsáveis.
 - Não oferece interface interativa; a entrada e a saída ocorrem por arquivo.
 
@@ -63,6 +63,7 @@ Exemplo de estrutura de saída para uma despesa simples:
   "itens": [
     {
       "id": "d-001",
+      "data": "2026-07-03",
       "categoria": "alimentacao",
       "valor_original": 72.5,
       "valor_reembolsavel": 60,
@@ -107,11 +108,11 @@ Cada regra recebe um ID (`RN-001`, `RN-002`, ...). As tasks vão referenciar ess
 **Origem:** política do RH, item 5
 **Aceite:** Uma despesa de `R$ 100,01` sem nota fiscal deve ser `nao_reembolsavel` e motivo `nota_fiscal_obrigatoria`.
 
-### RN-006 — Viagem não inferida a partir da entrada
+### RN-006 — Dias em viagem inferidos a partir da hospedagem
 
-**Regra:** A entrada atual não contém um campo explícito de viagem; por isso, o sistema trata todas as despesas como não em viagem e aplica os limites básicos da política.
+**Regra:** A entrada atual não contém um campo explícito de viagem; por isso, o sistema considera como dia de viagem qualquer data em que exista uma despesa de hospedagem associada. Nesses dias, os limites diários passam a ser aumentados em 50%.
 **Origem:** política do RH, item 6
-**Aceite:** Uma despesa de transporte urbano de `R$ 90,00` em um dia sem limite restante deve ter valor reembolsável igual a `R$ 80,00`, não a `R$ 120,00`.
+**Aceite:** Uma despesa de transporte urbano de `R$ 90,00` em um dia com hospedagem associada deve ter valor reembolsável igual a `R$ 90,00` quando o limite diário passa de `R$ 80,00` para `R$ 120,00`.
 
 ### RN-007 — Duplicatas
 
@@ -166,8 +167,8 @@ Cada regra recebe um ID (`RN-001`, `RN-002`, ...). As tasks vão referenciar ess
 
 **Texto original do RH:** "Colaborador em viagem tem limites ampliados em 50%"
 **O que não está claro:** a política não declara como identificar viagem.
-**Decisão:** A entrada atual não possui um campo explícito de viagem; portanto, todas as despesas são tratadas como não em viagem e os limites básicos são aplicados.
-**Justificativa:** Não é possível inferir viagem sem um dado explícito na entrada e a spec precisa ser determinística.
+**Decisão:** Como a entrada não possui um campo explícito de viagem, o sistema considera como em viagem qualquer dia que contenha uma hospedagem associada. Nesse caso, os limites diários do dia são ampliados em 50%.
+**Justificativa:** A regra precisa ser determinística e a hospedagem funciona como sinal explícito de deslocamento, sem exigir alteração no formato de entrada.
 **Regra afetada:** RN-006
 
 ### AMB-005 — O que conta como período de competência
@@ -235,7 +236,8 @@ As regras devem ser aplicadas na seguinte ordem para que o resultado seja determ
 4. Validar se a categoria é aceitada.
 5. Detectar duplicatas e rejeitar a segunda ocorrência.
 6. Validar a obrigatoriedade de nota fiscal quando o valor for superior a `R$ 100,00`.
-7. Aplicar o limite diário por categoria e calcular o valor reembolsável parcial, quando necessário.
+7. Identificar se o dia é de viagem a partir da presença de hospedagem associada.
+8. Aplicar o limite diário por categoria, ampliado em 50% quando houver viagem, e calcular o valor reembolsável parcial, quando necessário.
 
 ## 9. Critérios de aceite
 
@@ -247,6 +249,3 @@ O sistema está pronto quando:
 - [ ] A implementação respeita a ordem de aplicação das regras descrita nesta spec.
 - [ ] A spec é suficiente para que uma pessoa sem ler o código possa verificar se a decisão de cada despesa está correta.
 
-## 10. O que fica em aberto
-
-A entrada atual não possui um campo explícito para identificar se o colaborador está em viagem. Por isso, esta spec assume que todas as despesas são não em viagem e aplica os limites básicos. Se no futuro a entrada incluir esse dado, a regra de limitação deve ser revisada e registrada em `DECISIONS.md`.
