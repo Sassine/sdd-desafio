@@ -407,3 +407,33 @@ def validar_limite_nao_zero(
         return False, "categoria_nao_reembolsavel_no_centro_custo"
 
     return True, None
+
+def carregar_cambio(caminho: str | Path) -> dict:
+    path = Path(caminho)
+    with path.open("r", encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+def converter_para_brl(
+    valor: Decimal, moeda: str | None, data: str, cambio: dict
+) -> Decimal:
+    if moeda is None or moeda == "BRL":
+        return valor
+
+    taxas = cambio.get("taxas", {})
+
+    datas_disponiveis = sorted(
+        data_disponivel
+        for data_disponivel in taxas
+        if data_disponivel <= data and moeda in taxas[data_disponivel]
+    )
+
+    if not datas_disponiveis:
+        raise ValueError(
+            f"Nenhuma cotacao disponivel para {moeda} em ou antes de {data}"
+        )
+
+    data_taxa = datas_disponiveis[-1]
+    taxa = Decimal(str(taxas[data_taxa][moeda]))
+
+    return (valor * taxa).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
