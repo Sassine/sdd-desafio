@@ -59,10 +59,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_rn_001_categoria_fora_da_politica_e_recusada` — `coworking` de R$ 89,00 resulta em `0.00`, status `recusada`
   - **Commit:** `pendente`
 
-- [ ] **T-009** — RN-004: duplicatas — primeira ocorrência paga, demais recusadas
+- [x] **T-009** — RN-004: duplicatas — primeira ocorrência paga, demais recusadas
   - **Atende:** RN-004, AMB-008
   - **Aceite:** `test_rn_004_duplicata_exata_recusa_a_segunda` — duas despesas iguais em data, categoria, fornecedor, descrição e valor resultam em R$ 54,90 e R$ 0,00; e `test_rn_004_fornecedor_diferente_nao_e_duplicata` passa
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-010** — RN-005: estornos — valor negativo abate integral, sem teto e sem nota
   - **Atende:** RN-005, AMB-010

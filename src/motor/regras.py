@@ -5,6 +5,7 @@ onde `None` significa "não decidi, siga para a próxima". `normalizar_categoria
 é a exceção: é o passo 2 (transformação, não decisão) e devolve uma nova
 `Despesa`, não um `Parecer`.
 """
+from collections.abc import Callable
 from dataclasses import replace
 from decimal import Decimal
 
@@ -48,3 +49,35 @@ def rn_001_categoria_coberta(despesa: Despesa, contexto: Contexto) -> Parecer | 
         regras_aplicadas=("RN-001",),
         justificativa=f"Categoria '{despesa.categoria}' nao e coberta pela politica de reembolso.",
     )
+
+
+def criar_rn_004_duplicata() -> Callable[[Despesa, Contexto], Parecer | None]:
+    """RN-004 — fábrica com estado próprio: a primeira ocorrência da chave
+    (data, categoria, fornecedor, descrição, valor) passa; as demais são
+    recusadas (AMB-008). Uma instância nova por cálculo, para não vazar
+    estado entre execuções (spec.md §3)."""
+    vistos: set[tuple] = set()
+
+    def regra(despesa: Despesa, contexto: Contexto) -> Parecer | None:
+        chave = (
+            despesa.data,
+            despesa.categoria,
+            despesa.fornecedor,
+            despesa.descricao,
+            despesa.valor,
+        )
+        if chave in vistos:
+            return Parecer(
+                despesa=despesa,
+                valor_reembolsavel=ZERO,
+                status=Status.RECUSADA,
+                regras_aplicadas=("RN-004",),
+                justificativa=(
+                    "Duplicata de um lancamento anterior identico em data, "
+                    "categoria, fornecedor, descricao e valor."
+                ),
+            )
+        vistos.add(chave)
+        return None
+
+    return regra
