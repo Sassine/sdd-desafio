@@ -15,10 +15,10 @@ a ordem de aplicação da spec §8.
 
 ## Fase 1 — Fundação
 
-- [ ] **T-001** — Esqueleto do projeto: `src/`, `tests/`, `pyproject.toml` com `pytest` como dependência de desenvolvimento
+- [x] **T-001** — Esqueleto do projeto: `src/`, `tests/`, `pyproject.toml` com `pytest` como dependência de desenvolvimento
   - **Atende:** nenhuma RN — habilita as demais
   - **Aceite:** `pytest` coleta e executa ao menos 1 teste, saída verde
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-002** — Modelo de dados imutável: `Despesa`, `Solicitacao`, `Contexto`, `Parecer`, `Resultado`, enum `Status`
   - **Atende:** `plan.md` §3
