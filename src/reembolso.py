@@ -397,3 +397,13 @@ def validar_categoria_por_politica(
         return False, "categoria_nao_politica"
 
     return True, None
+
+def validar_limite_nao_zero(
+    despesa: Despesa, centro_custo: str, politica: dict
+) -> tuple[bool, str | None]:
+    limite = obter_limite_categoria(politica, centro_custo, despesa.categoria)
+
+    if limite is not None and limite == Decimal("0.00"):
+        return False, "categoria_nao_reembolsavel_no_centro_custo"
+
+    return True, None
