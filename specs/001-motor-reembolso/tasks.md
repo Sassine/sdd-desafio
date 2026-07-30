@@ -69,24 +69,26 @@
 
 ## Fase 5 — Envelope (Dia 2, Política v4)
 
-> Contexto: comunicado do RH em 2026-07-30 trouxe a política v4, que
-> substitui limites constantes por uma tabela externa por centro de
-> custo (politica-v4.json), adiciona a categoria representacao,
-> exclui hospedagem do CC-ENG-PLATAFORMA, e introduz despesas em
-> moeda estrangeira convertidas via cambio.json. Ver DEC-013 a
-> DEC-016 em decisions.md e RN-013 a RN-017 / AMB-014 a AMB-016 em
-> spec.md.
+> **T-012 — título da fase.** Comunicado do RH em 2026-07-30 trouxe a
+> política v4, que substitui limites constantes por uma tabela externa
+> por centro de custo (politica-v4.json), adiciona a categoria
+> representacao, exclui hospedagem do CC-ENG-PLATAFORMA, e introduz
+> despesas em moeda estrangeira convertidas via cambio.json. T-012 não
+> tem entrega própria nem critério de aceite — é apenas o marcador de
+> abertura desta fase. O trabalho real está quebrado em T-013 a T-018
+> abaixo. Ver DEC-013 a DEC-016 em decisions.md e RN-013 a RN-017 /
+> AMB-014 a AMB-016 em spec.md.
 
-- [ ] **T-012** — *(título da fase — sem entrega própria; ver T-013 a T-018 abaixo)*
-
-- [ ] **T-013** — Implementar leitura da política externa (politica-v4.json) com fallback por categoria.
+- [x] **T-013** — Implementar leitura da política externa (politica-v4.json) com fallback por categoria.
   - **Atende:** RN-013, AMB-014
-  - **Aceite:** função que recebe centro de custo + categoria e devolve
-    o limite aplicável, testada com: CC-COMERCIAL/alimentacao (usa valor
-    específico), CC-ADM/hospedagem (cai no padrão só nessa categoria),
-    CC-SUPORTE-N2/qualquer categoria (centro de custo ausente da
-    tabela, usa padrão inteiro).
-  - **Commit:** `<preencher depois>`
+  - **Aceite:** testes em `tests/test_politica_externa.py` (6 casos:
+    valor específico do centro de custo, fallback por categoria dentro
+    de um centro de custo presente, centro de custo ausente da tabela
+    usando padrão inteiro, limite zero retornado como zero e não como
+    ausência, categoria não coberta nem no centro de custo nem no
+    padrão retorna None, categoria condicional a centro de custo
+    específico).
+  - **Commit:** `feat(T-013): le politica externa com fallback por categoria (RN-013)`
 
 - [ ] **T-014** — Suportar a categoria "representacao" como categoria válida condicional ao centro de custo.
   - **Atende:** RN-014, AMB-015
@@ -147,7 +149,7 @@
 | RN-010 | T-010 | `test_todas_as_despesas_tem_justificativa_preenchida` |
 | RN-011 | T-002 | `test_normalizacao_arredonda_half_up_em_caso_de_empate` |
 | RN-012 | T-010 | `test_hospedagem_aplica_limite_individual_de_250_reais` |
-| RN-013 | T-013 | *(a definir na implementação)* |
+| RN-013 | T-013 | `test_politica_externa.py` (6 casos) |
 | RN-014 | T-014 | *(a definir na implementação)* |
 | RN-015 | T-015 | *(a definir na implementação)* |
 | RN-016 | T-016 | *(a definir na implementação)* |
