@@ -30,10 +30,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_rn_010_arredonda_na_leitura` — `33.333` vira exatamente `Decimal("33.33")`, e o valor nunca passa por `float`
   - **Commit:** `pendente`
 
-- [ ] **T-004** — Validação de entrada: campo obrigatório ausente ou tipo inválido rejeita a execução com mensagem nomeando o campo
+- [x] **T-004** — Validação de entrada: campo obrigatório ausente ou tipo inválido rejeita a execução com mensagem nomeando o campo
   - **Atende:** `spec.md` §9 (último critério), §3 (não adivinha entrada malformada)
   - **Aceite:** `test_entrada_sem_campo_obrigatorio_e_rejeitada` — entrada sem `despesas[].valor` levanta erro citando `valor`, e nenhum resultado parcial é escrito
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-005** — Módulo de política: tetos por categoria, piso de nota fiscal e fator de viagem como constantes `Decimal`
   - **Atende:** `plan.md` §4
