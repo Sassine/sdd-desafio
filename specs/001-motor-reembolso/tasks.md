@@ -49,10 +49,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_rn_002_categoria_em_caixa_alta_e_normalizada` — `"ALIMENTACAO"` é tratada como `alimentacao` e a categoria normalizada é a que sai no resultado
   - **Commit:** `pendente`
 
-- [ ] **T-007** — RN-003: competência — despesa fora do mês é recusada e permanece no resultado
+- [x] **T-007** — RN-003: competência — despesa fora do mês é recusada e permanece no resultado
   - **Atende:** RN-003, AMB-009
   - **Aceite:** `test_rn_003_despesa_fora_da_competencia_e_recusada` — data `2026-04-15` com competência `2026-07` resulta em `0.00`, status `recusada`, presente na lista de itens
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-008** — RN-001: categoria fora da política é recusada e permanece no resultado
   - **Atende:** RN-001
