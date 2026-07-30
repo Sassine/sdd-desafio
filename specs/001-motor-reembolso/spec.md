@@ -1,6 +1,6 @@
 # Spec — Motor de Cálculo de Reembolso
 
-**Versão:** 1.0 · **Status:** aprovada · **Última alteração:** 2026-07-30
+**Versão:** 1.1 · **Status:** aprovada · **Última alteração:** 2026-07-30
 
 > **Regra de ouro deste arquivo:** ele descreve o QUÊ e o PORQUÊ. Nenhuma linha
 > aqui pode citar linguagem, biblioteca, classe, função ou estrutura de pasta.
@@ -100,7 +100,7 @@ jantar de R$ 38,00, ambos com nota, no mesmo dia:
       "valor_reembolsavel": "60.00",
       "valor_glosado": "12.50",
       "status": "parcial",
-      "regras_aplicadas": ["RN-006"],
+      "regras_aplicadas": ["RN-007"],
       "justificativa": "Valor acima do teto de R$ 60,00 para alimentacao. Excedente de R$ 12,50 glosado."
     },
     {
@@ -111,7 +111,7 @@ jantar de R$ 38,00, ambos com nota, no mesmo dia:
       "valor_reembolsavel": "38.00",
       "valor_glosado": "0.00",
       "status": "aprovada",
-      "regras_aplicadas": ["RN-006"],
+      "regras_aplicadas": ["RN-007"],
       "justificativa": "Valor dentro do teto de R$ 60,00 para alimentacao."
     }
   ]
