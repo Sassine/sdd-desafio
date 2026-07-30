@@ -35,10 +35,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_entrada_sem_campo_obrigatorio_e_rejeitada` — entrada sem `despesas[].valor` levanta erro citando `valor`, e nenhum resultado parcial é escrito
   - **Commit:** `pendente`
 
-- [ ] **T-005** — Módulo de política: tetos por categoria, piso de nota fiscal e fator de viagem como constantes `Decimal`
+- [x] **T-005** — Módulo de política: tetos por categoria, piso de nota fiscal e fator de viagem como constantes `Decimal`
   - **Atende:** `plan.md` §4
   - **Aceite:** `test_politica_expoe_limites_da_v3` — os quatro valores conferem com a spec §5 (60, 80, 250, 100) e são `Decimal`, não `float`
-  - **Commit:**
+  - **Commit:** `pendente`
 
 ## Fase 2 — Regras de negócio
 
