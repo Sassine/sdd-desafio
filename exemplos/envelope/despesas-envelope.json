@@ -1,0 +1,113 @@
+{
+  "colaborador": {
+    "id": "c-0912",
+    "nome": "Rafael Nkemelu",
+    "centro_custo": "CC-COMERCIAL"
+  },
+  "periodo": {
+    "competencia": "2026-07",
+    "inicio": "2026-07-01",
+    "fim": "2026-07-31"
+  },
+  "despesas": [
+    {
+      "id": "e-001",
+      "data": "2026-07-13",
+      "categoria": "representacao",
+      "descricao": "Jantar com prospect - fechamento de contrato",
+      "fornecedor": "Casa Trindade",
+      "valor": 340.00,
+      "moeda": "BRL",
+      "tem_nota_fiscal": true
+    },
+    {
+      "id": "e-002",
+      "data": "2026-07-14",
+      "categoria": "alimentacao",
+      "descricao": "Almoco - Lisboa",
+      "fornecedor": "Taberna do Chiado",
+      "valor": 22.00,
+      "moeda": "EUR",
+      "tem_nota_fiscal": true
+    },
+    {
+      "id": "e-003",
+      "data": "2026-07-15",
+      "categoria": "alimentacao",
+      "descricao": "Cafe e sanduiche",
+      "fornecedor": "Padaria Lisboa",
+      "valor": 14.50,
+      "moeda": "EUR",
+      "tem_nota_fiscal": false
+    },
+    {
+      "id": "e-004",
+      "data": "2026-07-18",
+      "categoria": "alimentacao",
+      "descricao": "Jantar de sabado",
+      "fornecedor": "Cervejaria Ramiro",
+      "valor": 30.00,
+      "moeda": "EUR",
+      "tem_nota_fiscal": true
+    },
+    {
+      "id": "e-005",
+      "data": "2026-07-20",
+      "categoria": "transporte_urbano",
+      "descricao": "Corridas do dia",
+      "fornecedor": "Bolt",
+      "valor": 40.00,
+      "moeda": "USD",
+      "tem_nota_fiscal": false
+    },
+    {
+      "id": "e-006",
+      "data": "2026-07-21",
+      "categoria": "representacao",
+      "descricao": "Almoco com parceiro - Londres",
+      "fornecedor": "The Ivy",
+      "valor": 55.00,
+      "moeda": "GBP",
+      "tem_nota_fiscal": true
+    },
+    {
+      "id": "e-007",
+      "data": "2026-07-22",
+      "categoria": "hospedagem",
+      "descricao": "Hotel Londres - 3 noites",
+      "fornecedor": "Premier Inn",
+      "valor": 1200.00,
+      "moeda": "BRL",
+      "tem_nota_fiscal": true
+    },
+    {
+      "id": "e-008",
+      "data": "2026-07-23",
+      "categoria": "alimentacao",
+      "descricao": "Almoco de equipe",
+      "fornecedor": "Restaurante Tavola",
+      "valor": 95.00,
+      "moeda": "BRL",
+      "tem_nota_fiscal": true
+    },
+    {
+      "id": "e-009",
+      "data": "2026-07-24",
+      "categoria": "coworking",
+      "descricao": "Sala de reuniao para demo",
+      "fornecedor": "HubOffice",
+      "valor": 120.00,
+      "moeda": "BRL",
+      "tem_nota_fiscal": true
+    },
+    {
+      "id": "e-010",
+      "data": "2026-07-27",
+      "categoria": "alimentacao",
+      "descricao": "Almoco",
+      "fornecedor": "Bistro Central",
+      "valor": 88.00,
+      "tem_nota_fiscal": true
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "versao": "v4",
+  "vigencia": "2026-07-01",
+  "moeda_base": "BRL",
+  "padrao": {
+    "alimentacao": { "limite": 60.00, "periodicidade": "dia" },
+    "transporte_urbano": { "limite": 80.00, "periodicidade": "dia" },
+    "hospedagem": { "limite": 250.00, "periodicidade": "diaria" }
+  },
+  "centros_custo": {
+    "CC-ENG-PLATAFORMA": {
+      "alimentacao": { "limite": 75.00, "periodicidade": "dia" },
+      "transporte_urbano": { "limite": 80.00, "periodicidade": "dia" },
+      "hospedagem": { "limite": 0.00, "periodicidade": "diaria", "observacao": "nao reembolsavel" }
+    },
+    "CC-COMERCIAL": {
+      "alimentacao": { "limite": 90.00, "periodicidade": "dia" },
+      "transporte_urbano": { "limite": 150.00, "periodicidade": "dia" },
+      "hospedagem": { "limite": 400.00, "periodicidade": "diaria" },
+      "representacao": { "limite": 300.00, "periodicidade": "dia" }
+    },
+    "CC-ADM": {
+      "alimentacao": { "limite": 45.00, "periodicidade": "dia" },
+      "transporte_urbano": { "limite": 60.00, "periodicidade": "dia" }
+    }
+  },
+  "nota_fiscal_obrigatoria_acima_de": 100.00,
+  "acrescimo_em_viagem_percentual": 50
+}
