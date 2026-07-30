@@ -155,6 +155,36 @@ Cada regra abaixo recebe um identificador e será referenciada pelas tasks.
 **Origem:** política do RH, item 3.
 **Aceite:** uma despesa de hospedagem de R$ 480,00 deve resultar em R$ 250,00 reembolsável e R$ 230,00 não reembolsável.
 
+### RN-013 — Limites lidos de política externa por centro de custo
+
+**Regra:** Os limites de reembolso deixam de ser constantes no código e passam a ser lidos de um arquivo de política externo (politica-v4.json), que define uma tabela "padrão" e tabelas específicas por centro de custo. Quando o centro de custo do colaborador não está na tabela, aplica-se a tabela "padrão" para todas as categorias. Quando o centro de custo está na tabela mas não define uma categoria específica (ex: CC-ADM não define hospedagem nem representacao), aplica-se o limite "padrão" apenas para essa categoria ausente — o restante das categorias definidas no centro de custo continua usando os valores específicos dele.
+**Origem:** comunicado do RH, item A.
+**Aceite:** um colaborador do CC-ADM com uma despesa de hospedagem deve usar o limite padrão de R$250,00/diária (já que CC-ADM não define hospedagem), mas uma despesa de alimentação do mesmo colaborador usa R$45,00/dia (valor específico do CC-ADM).
+
+### RN-014 — Categoria "representacao"
+
+**Regra:** A categoria representacao passa a ser válida para reembolso, mas apenas nos centros de custo cuja tabela de política a define explicitamente. Em centros de custo sem essa categoria na tabela (inclusive na política padrão), despesas de representacao são recusadas como categoria fora da política (mesmo comportamento de RN-001).
+**Origem:** comunicado do RH, item A.
+**Aceite:** uma despesa de representacao do CC-COMERCIAL é avaliada contra o limite de R$300,00/dia; a mesma categoria em um centro de custo sem essa entrada é recusada com motivo categoria_nao_politica.
+
+### RN-015 — Hospedagem não reembolsável em centro de custo específico
+
+**Regra:** Quando a tabela de política de um centro de custo define limite 0,00 para uma categoria (caso de CC-ENG-PLATAFORMA e hospedagem), toda despesa dessa categoria nesse centro de custo é recusada integralmente, com motivo próprio — não tratada como "limite muito baixo que gera reembolso parcial de zero".
+**Origem:** comunicado do RH, item A ("CC-ENG-PLATAFORMA não reembolsa hospedagem de forma alguma").
+**Aceite:** uma despesa de hospedagem de qualquer valor no CC-ENG-PLATAFORMA deve ter status recusada e motivo categoria_nao_reembolsavel_no_centro_custo, não parcialmente_reembolsada com valor zero.
+
+### RN-016 — Conversão de moeda estrangeira
+
+**Regra:** Despesas podem trazer um campo moeda (código ISO 4217). Quando ausente, assume-se BRL. Despesas em moeda estrangeira são convertidas para BRL usando a taxa de câmbio da DATA DA DESPESA (não a taxa do dia da execução do motor), lida de cambio.json, antes de aplicar qualquer limite ou regra de valor (nota fiscal, limite diário, etc.). Os limites da política são sempre expressos em BRL.
+**Origem:** comunicado do RH, item B.
+**Aceite:** uma despesa de EUR 22,00 na data 2026-07-14 (taxa EUR=5,93) deve ser convertida para R$130,46 antes de ser comparada a qualquer limite.
+
+### RN-017 — Taxa de câmbio ausente na data exata
+
+**Regra:** Quando não há cotação publicada para a data exata da despesa (ex: finais de semana, feriados bancários), utiliza-se a cotação do último dia útil anterior disponível em cambio.json.
+**Origem:** interpretação definida por esta spec (o comunicado do RH menciona a lacuna sem resolvê-la — ver AMB-016).
+**Aceite:** uma despesa datada em 2026-07-18 (sábado, sem cotação) em EUR deve usar a taxa de 2026-07-17 (EUR=5,96), o último dia útil anterior disponível.
+
 ---
 
 ## 6. Ambiguidades identificadas e decisões
@@ -262,6 +292,30 @@ Cada regra abaixo recebe um identificador e será referenciada pelas tasks.
 **Decisão:** valor zero não é tratado como ajuste; apenas valores negativos acionam RN-008.
 **Justificativa:** a regra explícita da spec fala em valores negativos como ajustes, e zero não é negativo.
 **Regra afetada:** RN-008
+
+### AMB-014 — Herança de política padrão por categoria ou por centro de custo inteiro?
+
+**Texto original do RH:** "Alguns centros de custo não têm entrada na tabela. Nesse caso, aplica-se a política padrão."
+**O que não está claro:** o texto só cobre centro de custo totalmente ausente da tabela. Não diz o que fazer quando o centro de custo ESTÁ na tabela, mas uma categoria específica dele não está definida (caso do CC-ADM, que não define hospedagem nem representacao).
+**Decisão:** a herança da política padrão é avaliada por categoria, não por centro de custo inteiro. Um centro de custo presente na tabela usa seus valores específicos onde definidos, e cai no padrão categoria a categoria, onde a tabela dele for omissa.
+**Justificativa:** essa é a leitura mais útil operacionalmente — caso contrário, um centro de custo que define só 2 das 4 categorias ficaria sem nenhuma regra para as outras duas, o que pareceria uma falha de dados, não uma decisão de negócio.
+**Regra afetada:** RN-013
+
+### AMB-015 — Limite de representação: por despesa ou somado por dia?
+
+**Texto original do RH:** politica-v4.json define representacao com "periodicidade": "dia", igual às demais categorias.
+**O que não está claro:** o comunicado não repete explicitamente a mesma pergunta já resolvida em AMB-001 (por despesa vs. soma do dia), mas o campo periodicidade sugere que a mesma lógica se aplica.
+**Decisão:** representacao segue a mesma regra de AMB-001 — soma de todas as despesas dessa categoria no mesmo dia é comparada ao limite diário.
+**Justificativa:** consistência com o tratamento já dado a alimentação e transporte_urbano, que usam a mesma estrutura periodicidade: dia na política.
+**Regra afetada:** RN-014
+
+### AMB-016 — Taxa de câmbio ausente na data exata da despesa
+
+**Texto original do RH:** "A conversão usa a taxa da data da despesa, não a taxa de hoje." O arquivo cambio.json observa que "cotações publicadas apenas em dias úteis bancários."
+**O que não está claro:** o comunicado não diz o que fazer quando a data da despesa cai em um dia sem cotação publicada (ex: fim de semana) — e o próprio dataset de teste contém esse caso (despesa e-004, datada em um sábado).
+**Decisão:** usar a cotação do último dia útil anterior disponível no arquivo.
+**Justificativa:** é a convenção mais comum em conversão cambial para despesas de fim de semana, e evita rejeitar despesas legítimas só por caírem em dia sem pregão.
+**Regra afetada:** RN-017
 
 ---
 
