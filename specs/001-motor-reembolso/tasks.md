@@ -90,13 +90,15 @@
     específico).
   - **Commit:** `feat(T-013): le politica externa com fallback por categoria (RN-013)`
 
-- [ ] **T-014** — Suportar a categoria "representacao" como categoria válida condicional ao centro de custo.
+- [x] **T-014** — Suportar a categoria "representacao" como categoria válida condicional ao centro de custo.
   - **Atende:** RN-014, AMB-015
-  - **Aceite:** despesa e-001 (representacao, CC-COMERCIAL) é aceita e
-    avaliada contra limite de R$300/dia, agregado por dia como as
-    demais categorias; a mesma categoria em um centro de custo sem
-    essa entrada é recusada como categoria_nao_politica.
-  - **Commit:** `<preencher depois>`
+  - **Aceite:** testes em `tests/test_representacao.py` (4 casos:
+    representacao válida no centro de custo que a define, representacao
+    recusada como categoria_nao_politica no centro de custo que não a
+    define, categorias já conhecidas — alimentacao — continuam válidas
+    via política, categoria totalmente fora da política — coworking —
+    continua recusada).
+  - **Commit:** `feat(T-014): valida categoria via politica externa, incluindo representacao (RN-014)`
 
 - [ ] **T-015** — Tratar categoria com limite zero como não reembolsável no centro de custo.
   - **Atende:** RN-015
@@ -150,7 +152,7 @@
 | RN-011 | T-002 | `test_normalizacao_arredonda_half_up_em_caso_de_empate` |
 | RN-012 | T-010 | `test_hospedagem_aplica_limite_individual_de_250_reais` |
 | RN-013 | T-013 | `test_politica_externa.py` (6 casos) |
-| RN-014 | T-014 | *(a definir na implementação)* |
+| RN-014 | T-014 | `test_representacao.py` (4 casos) |
 | RN-015 | T-015 | *(a definir na implementação)* |
 | RN-016 | T-016 | *(a definir na implementação)* |
 | RN-017 | T-016 | *(a definir na implementação)* |
