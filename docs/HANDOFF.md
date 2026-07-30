@@ -18,7 +18,7 @@
 | `CLAUDE.md`, `README.md` | preenchidos | `ac6b65d` |
 | `specs/001-motor-reembolso/DECISIONS.md` | vazio **de propósito** — spec 1.0 é a linha de base | — |
 | `src/`, `tests/` | não existem — a manhã é sem código, por cronograma | — |
-| `docs/sessions/` | **pendente** — ver abaixo | — |
+| `docs/sessions/` | 2 sessões exportadas em `.jsonl` cru + `.md` legível | `<este>` |
 
 Números de referência já verificados contra `exemplos/despesas-exemplo.json`:
 **total lançado R$ 1.816,84 · total reembolsável R$ 703,43**. Estão fixados como
@@ -26,11 +26,17 @@ critério de aceite na `spec.md` §9 e são o alvo da T-022.
 
 ## Pendências que não são código
 
-1. **`/export` da sessão da manhã** para `docs/sessions/01-especificacao.md`.
-   Sem `docs/sessions/`, o critério 4 da rúbrica vale zero. É a única pendência
-   com custo de nota já incorrido.
+1. **Reexportar as sessões ao fechar cada terminal:**
+   `python docs/sessions/_exportar.py`. O `/export` não funciona nesta máquina;
+   usamos a alternativa do `FAQ.md` (cópia dos `.jsonl` de
+   `~/.claude/projects/<slug>/`). Ao acrescentar uma sessão nova, registre o
+   prefixo do UUID no dicionário `ROTULOS` do script.
 
-2. **Revisão das decisões de ambiguidade.** As 12 foram decididas na opção A.
+2. **O `RELATORIO.md` precisa explicar o formato das sessões.** O `FAQ.md` exige
+   isso de quem usa a alternativa ao `/export`. O motivo já está em
+   `docs/sessions/README.md`; falta transportar para o relatório no Dia 2.
+
+3. **Revisão das decisões de ambiguidade.** As 12 foram decididas na opção A.
    Sete sub-decisões não estavam cobertas pela letra e foram tomadas junto —
    estão marcadas abaixo. Elas já vivem na `spec.md`; a pendência é a revisão,
    não o registro.
