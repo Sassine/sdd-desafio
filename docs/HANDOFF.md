@@ -77,6 +77,31 @@ manhã se sustentaram sem revisão durante a implementação.
   borda prova o comportamento real de ponta a ponta. Os dois são intencionais
   e não contradizem um ao outro — testam camadas diferentes.
 
+## ⚠️ Pendência importante para o Dia 2 — granularidade dos commits
+
+O `DESAFIO.md` (linhas 131-135) mostra `test(T-003)` e `feat(T-003)` como
+**dois commits separados** para a mesma task, e é isso que o handoff da manhã
+também instruía. Na implementação da tarde (T-001..T-022), isso **não** foi
+seguido: quase toda task fechou num único commit `feat(T-0XX)` com teste e
+implementação juntos (exceção: T-013, T-016, T-017, T-018, T-020, que só
+acrescentaram teste a código que já existia e por isso já saíram como
+`test(T-0XX)` sozinho — nesses a convenção bateu por acidente).
+
+**Decisão:** não reescrever o histórico do Dia 1 para corrigir isso — é
+exatamente o cenário do `FAQ.md` ("Meus commits ficaram grandes demais"): não
+reescreva para maquiar, registre o que aconteceu e siga a convenção certa daí
+em diante. Histórico honesto imperfeito vale mais que histórico reescrito.
+
+**Para o Dia 2 (T-023 em diante): separar sempre `test(T-02X)` e `feat(T-02X)`
+em dois commits**, na ordem teste → implementação, como o exemplo do
+`DESAFIO.md` mostra. Sem exceção, mesmo quando parecer pequeno demais para
+valer dois commits.
+
+**Isto precisa ir para o `RELATORIO.md`** (seção de Rastreabilidade ou
+Diligência): citar que a Fase 1-4 desviou da granularidade do exemplo,
+por quê não foi corrigida por reescrita, e que a Fase 5 corrige o padrão
+daqui em diante.
+
 ## Por onde retomar
 
 Sistema base funcionando e testado, pronto para o envelope do Dia 2. Não há
@@ -88,7 +113,8 @@ Ordem de trabalho ao absorver o envelope, conforme `CLAUDE.md` e `DESAFIO.md`:
 1. Registrar o gatilho e a mudança em `DECISIONS.md` **antes** de tocar em código.
 2. Editar `spec.md` (e `plan.md` se a mudança for de arquitetura).
 3. Criar as tasks novas em `tasks.md` a partir de T-023 — não renumerar as antigas.
-4. Só então código: teste (`test(T-02X)`) antes ou junto do `feat(T-02X)`.
+4. Só então código: commit `test(T-02X)` primeiro, commit `feat(T-02X)` depois,
+   **sempre separados** (ver pendência de granularidade acima).
 
 Se aparecer uma regra de negócio que não está na `spec.md`, **pare** — é bug de
 spec, e o conserto é na spec antes do código.
