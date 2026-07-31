@@ -79,10 +79,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_rn_007_teto_e_por_despesa_nao_por_dia` — R$ 72,50 e R$ 38,00 no mesmo dia resultam em R$ 60,00 e R$ 38,00; `test_rn_007_valor_no_teto_e_aprovado_integralmente` — R$ 60,00 sai como `aprovada` sem glosa
   - **Commit:** `pendente`
 
-- [ ] **T-013** — RN-008: cada lançamento de hospedagem vale uma diária; descrição não é interpretada
+- [x] **T-013** — RN-008: cada lançamento de hospedagem vale uma diária; descrição não é interpretada
   - **Atende:** RN-008, AMB-007
   - **Aceite:** `test_rn_008_hospedagem_conta_como_uma_diaria` — R$ 480,00 descrita como "2 diarias", fora de viagem, resulta em R$ 250,00
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-014** — RN-009: `Contexto` de viagem — datas com lançamento de hospedagem ampliam os tetos em 50%
   - **Atende:** RN-009, AMB-006
