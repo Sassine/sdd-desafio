@@ -1,6 +1,6 @@
 # Sessao 03-implementacao-t001-t022
 
-**Periodo:** 2026-07-30T23:44 a 00:30 · **Registros:** 689
+**Periodo:** 2026-07-30T23:44 a 00:43 · **Registros:** 746
 **Origem:** `da3fa182-7846-4b20-8d1d-ccabbd174814.jsonl` (copia crua no mesmo diretorio)
 
 > Renderizacao legivel do transcript. O `.jsonl` ao lado e a fonte
@@ -3596,6 +3596,325 @@ Toda a matriz de cobertura do `tasks.md` está confirmada — cada teste citado 
 The file c:\Users\vitor\Documents\sdd-desafio\docs\sessions\_exportar.py has been updated successfully. (file state is current in your context — no need to Read it back)
 ```
 </details>
+
+<details><summary>🔧 <code>Bash</code></summary>
+
+```json
+{"command": "cd \"c:\\Users\\vitor\\Documents\\sdd-desafio\" && python docs/sessions/_exportar.py 2>&1"}
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+exportada: 01-abertura-interrompida
+exportada: 02-especificacao-spec-plan-tasks
+exportada: 03-implementacao-t001-t022
+```
+</details>
+
+<details><summary>🔧 <code>Bash</code></summary>
+
+```json
+{"command": "cd \"c:\\Users\\vitor\\Documents\\sdd-desafio\" && ls -la docs/sessions/ && echo \"---\" && head -20 docs/sessions/03-implementacao-t001-t022.md"}
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+total 3416
+drwxr-xr-x 1 vitor 197121       0 Jul 30 21:30 .
+drwxr-xr-x 1 vitor 197121       0 Jul 30 21:19 ..
+-rw-r--r-- 1 vitor 197121  240089 Jul 30 21:30 01-abertura-interrompida.jsonl
+-rw-r--r-- 1 vitor 197121   26788 Jul 30 21:30 01-abertura-interrompida.md
+-rw-r--r-- 1 vitor 197121  904174 Jul 30 21:30 02-especificacao-spec-plan-tasks.jsonl
+-rw-r--r-- 1 vitor 197121   64039 Jul 30 21:30 02-especificacao-spec-plan-tasks.md
+-rw-r--r-- 1 vitor 197121 2074929 Jul 30 21:30 03-implementacao-t001-t022.jsonl
+-rw-r--r-- 1 vitor 197121  156256 Jul 30 21:30 03-implementacao-t001-t022.md
+-rw-r--r-- 
+…(resultado truncado — ver .jsonl)
+```
+</details>
+
+### Claude
+
+Exportação funcionou. Agora vou atualizar o `README.md` de sessões com a entrada 03, e revisar/consolidar o `HANDOFF.md` para garantir que ele funde manhã+tarde de forma clara.
+
+<details><summary>🔧 <code>Edit</code></summary>
+
+```json
+{"replace_all": false, "file_path": "c:\\Users\\vitor\\Documents\\sdd-desafio\\docs\\sessions\\README.md", "old_string": "| # | Período | O que aconteceu |\n|---|---|---|\n| 01 | 2026-07-30 20:19–20:25 | Abertura, interrompida em 6 minutos. Mantida por honestidade de registro: mostra a falsa partida antes do trabalho real. |\n| 02 | 2026-07-30 20:49–22:32 | Especificação completa: levantamento das …(truncado)
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+The file c:\Users\vitor\Documents\sdd-desafio\docs\sessions\README.md has been updated successfully. (file state is current in your context — no need to Read it back)
+```
+</details>
+
+<details><summary>🔧 <code>Read</code></summary>
+
+```json
+{"file_path": "c:\\Users\\vitor\\Documents\\sdd-desafio\\docs\\HANDOFF.md"}
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+1	# Handoff — fim do Dia 1, tarde
+2	
+3	**Data:** 2026-07-30 · **Próxima sessão:** Dia 2, ~10h — envelope lacrado
+4	
+5	> Este arquivo é fino de propósito. O contexto real do projeto vive na `spec.md`,
+6	> no `plan.md` e no `tasks.md` — se alguma regra de negócio só existir aqui, é
+7	> bug de spec. Aqui ficam só o estado, o que está pendente e por onde retomar.
+8	
+9	---
+10	
+11	## Estado
+12	
+13	| Artefato | Estado | Commit |
+14	|---|---|---|
+15	| `specs/001-motor-reembolso/spec.md` | 1.1 — corrigido RN-006→RN-007 no exemplo da §4 (D-001); §9 com os 10 critérios marcados `[x]` | `bd1f432` |
+16	| `
+…(resultado truncado — ver .jsonl)
+```
+</details>
+
+<details><summary>🔧 <code>Edit</code></summary>
+
+```json
+{"replace_all": false, "file_path": "c:\\Users\\vitor\\Documents\\sdd-desafio\\docs\\HANDOFF.md", "old_string": "| `docs/sessions/` | pendente reexportar a sessão desta tarde ao fechar o terminal | — |", "new_string": "| `docs/sessions/` | sessão 03 (implementação) exportada em andamento — reexportar ao fechar o terminal para capturar as mensagens finais | — |"}
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+The file c:\Users\vitor\Documents\sdd-desafio\docs\HANDOFF.md has been updated successfully. (file state is current in your context — no need to Read it back)
+```
+</details>
+
+<details><summary>🔧 <code>Edit</code></summary>
+
+```json
+{"replace_all": false, "file_path": "c:\\Users\\vitor\\Documents\\sdd-desafio\\docs\\HANDOFF.md", "old_string": "1. **Reexportar as sessões ao fechar o terminal:** `python docs/sessions/_exportar.py`,\n   registrando o prefixo do UUID desta sessão no dicionário `ROTULOS`.", "new_string": "1. **Reexportar a sessão 03 ao fechar este terminal:** `python docs/sessions/_exportar.py`\n   (já registrada  …(truncado)
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+The file c:\Users\vitor\Documents\sdd-desafio\docs\HANDOFF.md has been updated successfully. (file state is current in your context — no need to Read it back)
+```
+</details>
+
+### Claude
+
+Agora vou commitar a exportação da sessão e o handoff atualizado.
+
+<details><summary>🔧 <code>Bash</code></summary>
+
+```json
+{"command": "cd \"c:\\Users\\vitor\\Documents\\sdd-desafio\" && git add docs/sessions/ docs/HANDOFF.md && git status --short"}
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+M  docs/HANDOFF.md
+M  docs/sessions/02-especificacao-spec-plan-tasks.jsonl
+M  docs/sessions/02-especificacao-spec-plan-tasks.md
+A  docs/sessions/03-implementacao-t001-t022.jsonl
+A  docs/sessions/03-implementacao-t001-t022.md
+M  docs/sessions/README.md
+M  docs/sessions/_exportar.py
+```
+</details>
+
+<details><summary>🔧 <code>Bash</code></summary>
+
+```json
+{"command": "cd \"c:\\Users\\vitor\\Documents\\sdd-desafio\" && git diff --stat docs/sessions/02-especificacao-spec-plan-tasks.jsonl docs/sessions/02-especificacao-spec-plan-tasks.md"}
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+(Bash completed with no output)
+```
+</details>
+
+<details><summary>🔧 <code>Bash</code></summary>
+
+```json
+{"command": "cd \"c:\\Users\\vitor\\Documents\\sdd-desafio\" && git diff docs/sessions/02-especificacao-spec-plan-tasks.jsonl | head -5; echo \"---\"; git diff docs/sessions/02-especificacao-spec-plan-tasks.md | head -20"}
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+---
+```
+</details>
+
+<details><summary>🔧 <code>Bash</code></summary>
+
+```json
+{"command": "cd \"c:\\Users\\vitor\\Documents\\sdd-desafio\" && git diff --stat HEAD -- docs/sessions/02-especificacao-spec-plan-tasks.jsonl docs/sessions/02-especificacao-spec-plan-tasks.md; git diff HEAD --numstat -- docs/sessions/02-especificacao-spec-plan-tasks.jsonl"}
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+.../02-especificacao-spec-plan-tasks.jsonl         |  32 ++++
+ docs/sessions/02-especificacao-spec-plan-tasks.md  | 184 ++++++++++++++++++++-
+ 2 files changed, 215 insertions(+), 1 deletion(-)
+32	0	docs/sessions/02-especificacao-spec-plan-tasks.jsonl
+```
+</details>
+
+<details><summary>🔧 <code>Bash</code></summary>
+
+```json
+{"command": "cd \"c:\\Users\\vitor\\Documents\\sdd-desafio\" && git commit -m \"docs(sessions): exporta sessao 03 (implementacao T-001..T-022)\n\nRegistra o prefixo da sessao atual (da3fa182) no ROTULOS do\n_exportar.py e roda a exportacao. A copia da sessao 02 tambem foi\natualizada: o .jsonl de origem cresceu ~32 registros desde a\nexportacao da manha, entao o re-export trouxe o conteudo mais re …(truncado)
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+[main 0393885] docs(sessions): exporta sessao 03 (implementacao T-001..T-022)
+ 7 files changed, 4515 insertions(+), 4 deletions(-)
+ create mode 100644 docs/sessions/03-implementacao-t001-t022.jsonl
+ create mode 100644 docs/sessions/03-implementacao-t001-t022.md
+```
+</details>
+
+<details><summary>🔧 <code>Bash</code></summary>
+
+```json
+{"command": "cd \"c:\\Users\\vitor\\Documents\\sdd-desafio\" && git show --stat HEAD | head -12 && git status --short"}
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+commit 039388595e8b5c9be21109a2e44b8e388fa32b95
+Author: vitorhugoreiis <vitorhugoreiis@gmail.com>
+Date:   Thu Jul 30 21:31:34 2026 -0300
+
+    docs(sessions): exporta sessao 03 (implementacao T-001..T-022)
+    
+    Registra o prefixo da sessao atual (da3fa182) no ROTULOS do
+    _exportar.py e roda a exportacao. A copia da sessao 02 tambem foi
+    atualizada: o .jsonl de origem cresceu ~32 registros desde a
+    exportacao da manha, entao o re-export trouxe o conteudo mais recente
+    daquele transcript. Sessao 03 e uma captura em andamento — sera
+    reexportada ao fechar o terminal, conforme do
+…(resultado truncado — ver .jsonl)
+```
+</details>
+
+<details><summary>🔧 <code>Bash</code></summary>
+
+```json
+{"command": "cd \"c:\\Users\\vitor\\Documents\\sdd-desafio\" && git show --stat HEAD | tail -12"}
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+reexportada ao fechar o terminal, conforme docs/sessions/README.md.
+    
+    Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+ docs/HANDOFF.md                                    |    7 +-
+ .../02-especificacao-spec-plan-tasks.jsonl         |   32 +
+ docs/sessions/02-especificacao-spec-plan-tasks.md  |  184 +-
+ docs/sessions/03-implementacao-t001-t022.jsonl     |  689 ++++
+ docs/sessions/03-implementacao-t001-t022.md        | 3605 ++++++++++++++++++++
+ docs/sessions/README.md                            |    1 +
+ docs/sessions/_exportar.py                         |    1 +
+ 7 files change
+…(resultado truncado — ver .jsonl)
+```
+</details>
+
+### Claude
+
+Tudo commitado corretamente, working tree limpo. Agora respondendo às três perguntas:
+
+<details><summary>🔧 <code>Bash</code></summary>
+
+```json
+{"command": "cd \"c:\\Users\\vitor\\Documents\\sdd-desafio\" && git status --short && python -m pytest -q 2>&1 | tail -3"}
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+........................................................................ [ 76%]
+......................                                                   [100%]
+94 passed in 0.41s
+```
+</details>
+
+### Claude
+
+**1. Tudo que estava previsto para o Dia 1 já foi implementado?**
+Sim, integralmente. `tasks.md` tem 5 fases: Fase 1 a 4 (T-001 a T-022) são exatamente o que estava planejado para hoje — fundação, as 10 regras de negócio, casos de borda e saída/CLI — e todas estão `[x]`, com commit. A **Fase 5 ("Envelope") está deliberadamente vazia** — é reservada para o Dia 2 e não fizemos nada nela, porque não sabemos o que vem e não devemos adivinhar ou pré-otimizar para uma mudança desconhecida (isso é uma recomendação explícita do `FAQ.md`: "resista à tentação de otimizar demais na expectativa da mudança"). Então: escopo do Dia 1 = 100% feito; escopo do Dia 2 = 0% feito, por design, esperando o envelope real.
+
+**2. Já foi testado tudo?**
+Sim, com evidência, não só afirmação:
+- 94 testes, todos verdes agora mesmo (`pytest -q`).
+- Toda regra RN-001 a RN-010 tem teste dedicado (conferi cada nome citado na matriz de cobertura do `tasks.md` contra os arquivos reais em `tests/` — todos existem).
+- As 18 linhas de casos de borda da spec §7 estão parametrizadas em um único teste (`test_casos_de_borda`).
+- As 4 fronteiras (R$ 100,00/100,01 e R$ 60,00/60,01) têm teste dedicado dos dois lados.
+- Teste ponta a ponta roda o `exemplos/despesas-exemplo.json` real e confere os números exatos da spec §9 (R$ 1.816,84 → R$ 703,43), mais os 7 itens-âncora.
+- CLI testada tanto por teste automatizado quanto por execução manual real do comando do `CLAUDE.md`.
+
+O que **não** foi testado (porque está fora de escopo do Dia 1): qualquer coisa relacionada ao envelope, porque ele não existe ainda.
+
+**3. Feito — handoff consolidado e sessão exportada.**
+- Reescrevi `docs/HANDOFF.md` fundindo manhã + tarde: estado de `spec.md`/`plan.md`/`tasks.md` (manhã), a correção D-001 que apliquei antes de codificar, o núcleo implementado, os 94 testes, e as pendências não-código carregadas do handoff da manhã (reexportar sessão, explicar formato no `RELATORIO.md`, revisão das 7 sub-decisões). Termina com o checklist de como absorver o envelope do Dia 2 (spec → `DECISIONS.md` → tasks → código).
+- Registrei esta sessão como `03-implementacao-t001-t022` no `docs/sessions/_exportar.py` e rodei a exportação — gerou `.jsonl` + `.md` em `docs/sessions/`, e atualizei o `README.md` da pasta com a entrada.
+- Tudo commitado (`0393885`).
+
+Um ponto de atenção: como a sessão ainda está em andamento, essa exportação **não captura as mensagens finais** (inclusive esta). O padrão já documentado no projeto é reexportar ao fechar o terminal — deixei isso registrado como pendência no `HANDOFF.md`.
+
+### Usuario
+
+ja encerrei.
+
+<details><summary>🔧 <code>Bash</code></summary>
+
+```json
+{"command": "ls -la \"$HOME/.claude/projects/c--Users-vitor-Documents-sdd-desafio/da3fa182-7846-4b20-8d1d-ccabbd174814.jsonl\""}
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+-rw-r--r-- 1 vitor 197121 2183190 Jul 30 21:43 /c/Users/vitor/.claude/projects/c--Users-vitor-Documents-sdd-desafio/da3fa182-7846-4b20-8d1d-ccabbd174814.jsonl
+```
+</details>
+
+### Claude
+
+O arquivo cresceu desde a última exportação (agora tem mais registros). Vou reexportar para capturar a sessão completa.
 
 <details><summary>🔧 <code>Bash</code></summary>
 
