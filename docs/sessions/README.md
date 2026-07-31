@@ -23,6 +23,7 @@ nenhum tratamento.
 |---|---|---|
 | 01 | 2026-07-30 20:19–20:25 | Abertura, interrompida em 6 minutos. Mantida por honestidade de registro: mostra a falsa partida antes do trabalho real. |
 | 02 | 2026-07-30 20:49–22:32 | Especificação completa: levantamento das 12 ambiguidades, decisão, `spec.md` 1.0, `plan.md` 1.0, `tasks.md` T-001..T-022. |
+| 03 | 2026-07-30 23:44–00:30 | Implementação completa das Fases 1 a 4 (T-001..T-022): núcleo do motor, carregador, serializador, CLI, 94 testes. Corrigiu inconsistência RN-006/RN-007 no exemplo da spec (`DECISIONS.md` D-001) antes de codificar. Exportada em andamento — pode não conter as mensagens finais da sessão. |
 
 ## Como reexportar
 

@@ -17,7 +17,7 @@
 | `specs/001-motor-reembolso/DECISIONS.md` | D-001 registrado (inconsistência RN-006/RN-007 no exemplo da spec) | `bd1f432` |
 | `src/` | núcleo completo: `motor/modelo.py`, `motor/politica.py`, `motor/regras.py`, `motor/calculadora.py`, `io/carregador.py`, `io/serializador.py`, `cli.py` | — |
 | `tests/` | 94 testes, todos verdes (`pytest -q`) | — |
-| `docs/sessions/` | pendente reexportar a sessão desta tarde ao fechar o terminal | — |
+| `docs/sessions/` | sessão 03 (implementação) exportada em andamento — reexportar ao fechar o terminal para capturar as mensagens finais | — |
 
 Critério de aceite da spec §9 confirmado pelo teste ponta a ponta
 (`tests/test_e2e_exemplo_oficial.py`, T-022): sobre
@@ -40,8 +40,9 @@ manhã se sustentaram sem revisão durante a implementação.
 
 ## Pendências que não são código (carregadas do handoff da manhã)
 
-1. **Reexportar as sessões ao fechar o terminal:** `python docs/sessions/_exportar.py`,
-   registrando o prefixo do UUID desta sessão no dicionário `ROTULOS`.
+1. **Reexportar a sessão 03 ao fechar este terminal:** `python docs/sessions/_exportar.py`
+   (já registrada no `ROTULOS`). A exportação feita durante a sessão não contém
+   as mensagens finais — reexportar sobrescreve com o transcript completo.
 2. **O `RELATORIO.md` precisa explicar o formato das sessões** (alternativa ao
    `/export`, motivo em `docs/sessions/README.md`) — ainda não escrito, é
    trabalho do Dia 2.
