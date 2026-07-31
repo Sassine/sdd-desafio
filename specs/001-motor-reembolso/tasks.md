@@ -76,8 +76,8 @@
 > despesas em moeda estrangeira convertidas via cambio.json. T-012 não
 > tem entrega própria nem critério de aceite — é apenas o marcador de
 > abertura desta fase. O trabalho real está quebrado em T-013 a T-018
-> abaixo. Ver DEC-013 a DEC-016 em decisions.md e RN-013 a RN-017 /
-> AMB-014 a AMB-016 em spec.md.
+> abaixo. Ver DEC-013 a DEC-017 em decisions.md e RN-013 a RN-018 /
+> AMB-014 a AMB-017 em spec.md.
 
 - [x] **T-013** — Implementar leitura da política externa (politica-v4.json) com fallback por categoria.
   - **Atende:** RN-013, AMB-014
@@ -119,14 +119,23 @@
     ausente é tratada como BRL, conversão em USD também funciona).
   - **Commit:** `feat(T-016): converte moeda estrangeira com fallback de dia util (RN-016, RN-017)`
 
-- [ ] **T-017** — Integrar política externa, representação, exclusão por centro de custo e câmbio no pipeline `processar_despesas`.
-  - **Atende:** RN-013 a RN-017 (orquestração)
-  - **Aceite:** rodar a CLI com despesas-envelope.json e
-    despesas-envelope-cc-desconhecido.json produz resultados
-    consistentes com todas as regras acima, mantendo o comportamento
-    das RN-001 a RN-012 para os casos que não mudaram (nota fiscal,
-    duplicata, período continuam funcionando como antes).
-  - **Commit:** `<preencher depois>`
+- [x] **T-017** — Integrar política externa, representação, exclusão por centro de custo e câmbio no pipeline `processar_despesas_v4`.
+  - **Atende:** RN-013 a RN-018 (orquestração)
+  - **Aceite:** testes em `tests/test_processar_despesas_v4.py` (5
+    casos: representacao avaliada contra limite do centro de custo,
+    despesa em EUR convertida antes de aplicar limite, hospedagem com
+    limite zero recusada no centro de custo, centro de custo ausente
+    da tabela usa política padrão, moeda USD convertida com taxa da
+    data). Descoberto durante a implementação: despesa e-006 em GBP,
+    moeda sem cotação em cambio.json — gerou RN-018/AMB-017/DEC-017
+    (câmbio indisponível → despesa recusada, não interrompe o
+    processamento das demais). Também corrigidos bugs de fundação:
+    `carregar_despesas` e `normalizar_despesas` não preservavam o
+    campo `moeda` (`test_leitura_preserva_moeda.py`,
+    `test_normalizacao_preserva_moeda.py`). Função antiga
+    `processar_despesas` (v3) mantida intacta, sem alteração —
+    `processar_despesas_v4` é função nova e independente.
+  - **Commit:** `feat(T-017): integra politica externa, representacao, cambio e limite zero no pipeline v4 (RN-013 a RN-018)`
 
 - [ ] **T-018** *(opcional — item C do comunicado)* — Implementar fila de aprovação manual para valor reembolsável acima de R$500.
   - **Atende:** item C do comunicado (opcional — não pontua ausência,
@@ -154,8 +163,9 @@
 | RN-010 | T-010 | `test_todas_as_despesas_tem_justificativa_preenchida` |
 | RN-011 | T-002 | `test_normalizacao_arredonda_half_up_em_caso_de_empate` |
 | RN-012 | T-010 | `test_hospedagem_aplica_limite_individual_de_250_reais` |
-| RN-013 | T-013 | `test_politica_externa.py` (6 casos) |
-| RN-014 | T-014 | `test_representacao.py` (4 casos) |
-| RN-015 | T-015 | `test_categoria_nao_reembolsavel.py` (3 casos) |
-| RN-016 | T-016 | `test_conversao_cambio.py` (5 casos) |
-| RN-017 | T-016 | `test_conversao_cambio.py` (5 casos) |
+| RN-013 | T-013, T-017 | `test_politica_externa.py` (6 casos), `test_processar_despesas_v4.py` |
+| RN-014 | T-014, T-017 | `test_representacao.py` (4 casos), `test_processar_despesas_v4.py` |
+| RN-015 | T-015, T-017 | `test_categoria_nao_reembolsavel.py` (3 casos), `test_processar_despesas_v4.py` |
+| RN-016 | T-016, T-017 | `test_conversao_cambio.py` (5 casos), `test_processar_despesas_v4.py` |
+| RN-017 | T-016, T-017 | `test_conversao_cambio.py` (5 casos), `test_processar_despesas_v4.py` |
+| RN-018 | T-017 | `test_processar_despesas_v4.py` (despesa e-006 em GBP recusada) |
