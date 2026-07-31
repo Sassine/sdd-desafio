@@ -113,10 +113,10 @@ a ordem de aplicação da spec §8.
 
 ## Fase 4 — Saída e CLI
 
-- [ ] **T-019** — Serializador: `Decimal` como texto de duas casas, `Status` em minúsculas, `valor_glosado` derivado
+- [x] **T-019** — Serializador: `Decimal` como texto de duas casas, `Status` em minúsculas, `valor_glosado` derivado
   - **Atende:** `spec.md` §4 (saída)
   - **Aceite:** `test_serializa_valores_como_texto_de_duas_casas` — `Decimal("60")` sai como `"60.00"`; nenhum `Decimal` cru chega ao `json.dump`
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-020** — Resumo: totais lançado, reembolsável e glosado, mais contagem por status
   - **Atende:** `spec.md` §4, §9 (penúltimo critério)
