@@ -185,6 +185,12 @@ Cada regra abaixo recebe um identificador e será referenciada pelas tasks.
 **Origem:** interpretação definida por esta spec (o comunicado do RH menciona a lacuna sem resolvê-la — ver AMB-016).
 **Aceite:** uma despesa datada em 2026-07-18 (sábado, sem cotação) em EUR deve usar a taxa de 2026-07-17 (EUR=5,96), o último dia útil anterior disponível.
 
+### RN-018 — Câmbio indisponível para a moeda da despesa
+
+**Regra:** Quando não há nenhuma cotação disponível para a moeda da despesa em cambio.json (nem na data exata, nem em dia útil anterior), a despesa é recusada, não avaliada com taxa presumida.
+**Origem:** interpretação definida por esta spec (o comunicado do RH não cobre moeda totalmente ausente do arquivo de câmbio, apenas data ausente).
+**Aceite:** uma despesa em GBP, moeda não presente em nenhuma entrada de cambio.json, deve ser recusada com motivo cambio_indisponivel.
+
 ---
 
 ## 6. Ambiguidades identificadas e decisões
@@ -316,6 +322,14 @@ Cada regra abaixo recebe um identificador e será referenciada pelas tasks.
 **Decisão:** usar a cotação do último dia útil anterior disponível no arquivo.
 **Justificativa:** é a convenção mais comum em conversão cambial para despesas de fim de semana, e evita rejeitar despesas legítimas só por caírem em dia sem pregão.
 **Regra afetada:** RN-017
+
+### AMB-017 — Moeda sem nenhuma cotação disponível no arquivo de câmbio
+
+**Texto original do RH:** o comunicado define conversão via cambio.json, mas não prevê o caso de a moeda simplesmente não constar no arquivo.
+**O que não está claro:** despesa e-006 do despesas-envelope.json está em GBP, moeda que não aparece em nenhuma data de cambio.json — diferente da lacuna de data (AMB-016), aqui não há nenhuma taxa de referência possível.
+**Decisão:** a despesa é recusada com motivo cambio_indisponivel, sem tentar aplicar taxa presumida ou tratar como BRL.
+**Justificativa:** aplicar taxa 1:1 ou ignorar a conversão mascararia um problema real de dados; recusar explicitamente é mais seguro e auditável que inventar um câmbio.
+**Regra afetada:** RN-018
 
 ---
 
