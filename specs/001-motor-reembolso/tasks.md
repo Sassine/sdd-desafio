@@ -96,10 +96,10 @@ a ordem de aplicação da spec §8.
 
 ## Fase 3 — Casos de borda
 
-- [ ] **T-016** — Tabela de casos de borda da spec §7 como teste parametrizado, uma linha por caso
+- [x] **T-016** — Tabela de casos de borda da spec §7 como teste parametrizado, uma linha por caso
   - **Atende:** `spec.md` §7 (18 linhas)
   - **Aceite:** `test_casos_de_borda` — 18 casos passam, cada um identificado pelo ID da regra no parâmetro
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-017** — Fronteiras testadas dos dois lados: R$ 100,00/R$ 100,01 e R$ 60,00/R$ 60,01
   - **Atende:** RN-006, RN-007, `plan.md` §6
