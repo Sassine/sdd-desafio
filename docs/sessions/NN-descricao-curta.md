@@ -1554,3 +1554,496 @@ GitHub Copilot: Vou ajustar a documentação de tasks para refletir os nomes e a
 Read [](file:///c%3A/Users/Samsung/Desktop/desafio-sdd/sdd-desafio/specs/001-motor-reembolso/tasks.md)
 
 Searched for regex `^def test_` (`**/tests/**/*.py`), 32 results
+
+O envelope chegou, e é pesado — ele quebra praticamente toda a lógica de limites que você já implementou (RN-002, RN-005, RN-012 todos dependiam de valores fixos no código). Vamos seguir exatamente a ordem que o próprio comunicado pede: **spec → DECISIONS.md → tasks.md → código**. Nada de codar ainda.
+
+## Passo 0 — Guardar os arquivos do envelope
+
+```cmd
+mkdir exemplos\envelope
+```
+
+Salve os 4 arquivos (`politica-v4.json`, `cambio.json`, `despesas-envelope.json`, `despesas-envelope-cc-desconhecido.json`) em `exemplos/envelope/`, depois:
+
+```cmd
+git add exemplos/envelope/
+git commit -m "docs: adiciona arquivos do envelope (politica v4, cambio, despesas de teste)"
+```
+
+## Passo 1 — O que quebra na spec atual (mapeamento)
+
+| RN existente | O que quebra |
+|---|---|
+| RN-001 (categorias aceitas) | A lista fixa (`alimentacao`, `transporte_urbano`, `hospedagem`) não cobre mais `representacao`, que só existe para alguns centros de custo |
+| RN-002 (limite diário R$60/R$80) | Limites deixam de ser constantes — vêm de `politica-v4.json`, por centro de custo |
+| RN-005 (viagem +50%) | O percentual (50%) já bate com `acrescimo_em_viagem_percentual`, mas a base do cálculo agora é o limite dinâmico, não mais um valor fixo |
+| RN-004 (NF acima de R$100) | O limiar também está no JSON de política agora (`nota_fiscal_obrigatoria_acima_de`), deveria deixar de ser hardcoded |
+| RN-012 (hospedagem R$250) | Vira variável por centro de custo, e **CC-ENG-PLATAFORMA tem limite zero** (não reembolsa hospedagem de forma alguma) — isso não é "limite baixo", é uma regra qualitativamente diferente |
+
+Ou seja: **quase todas as regras de valor precisam parar de ser constantes no código e passar a ler de `politica-v4.json`**. Isso é uma mudança de arquitetura, não só de valores.
+
+## Passo 2 — Ambiguidades que eu já encontrei (existem mais — o comunicado avisa isso)
+
+Essas são as que valem a pena você levar para a spec:
+
+1. **"Aplica-se a política padrão" — em que granularidade?** `CC-ADM` está na tabela, mas **não tem entrada para `hospedagem` nem `representacao`**. Isso significa: (a) CC-ADM cai na política padrão só para as categorias que faltam, ou (b) um centro de custo definido na tabela nunca herda do padrão, mesmo em categorias ausentes? A frase do RH cobre só "centros de custo ausentes da tabela" — não fala de "categoria ausente dentro de um centro de custo presente". Essa lacuna é sua para decidir.
+
+2. **Taxa de câmbio ausente para a data exata.** Olhe `cambio.json`: as datas pulam **18 e 19 de julho** (fim de semana) e **25 e 26** — exatamente como o próprio arquivo avisa ("cotações publicadas apenas em dias úteis bancários"). E a despesa **e-004** ("Jantar de **sábado**") está datada **2026-07-18** — um sábado, sem taxa publicada. Isso não é acidente do dataset, é a segunda armadilha que a dica do enunciado menciona ("a taxa da data da despesa... esconde uma decisão"). Você precisa decidir: usar a última taxa útil anterior? A próxima disponível? Recusar a despesa até ter câmbio? Isso é uma ambiguidade nova real.
+
+3. **Despesa sem campo `moeda`** (ex: `e-010`, `f-001`) — o comunicado já resolve isso ("quando ausente, assume-se BRL"), mas vale formalizar como RN mesmo assim.
+
+4. **Limite de representação por dia, mas é limite único ou dividido entre múltiplas despesas de representação no mesmo dia?** Mesma ambiguidade que já resolveram para alimentação/transporte (AMB-001) — provavelmente a mesma decisão se generaliza, mas vale reafirmar explicitamente.
+
+## Passo 3 — Prompt para começar (spec primeiro, sem código)
+
+```
+Chegou uma mudança de requisito (política de reembolso v4). Antes de 
+tocar em qualquer código, preciso atualizar a spec.
+
+Contexto da mudança:
+1. Limites deixam de ser constantes no código e passam a vir de um 
+   arquivo externo (exemplos/envelope/politica-v4.json), com uma tabela 
+   por centro de custo e uma política "padrão" para centros ausentes.
+2. Nova categoria "representacao" existe apenas para alguns centros de 
+   custo (ex: CC-COMERCIAL, limite R$300/dia).
+3. CC-ENG-PLATAFORMA tem limite de hospedagem R$0,00 — não reembolsa 
+   hospedagem de forma alguma, diferente de "limite baixo".
+4. Despesas podem vir em moeda estrangeira (campo "moeda", ISO 4217). 
+   Conversão usa a taxa da DATA DA DESPESA (não a de hoje), lida de 
+   exemplos/envelope/cambio.json. Ausência do campo = BRL.
+5. (Opcional) Itens acima de R$500 reembolsável entram em estado de 
+   pendência de aprovação, em vez de aprovação automática.
+
+Preciso que você:
+1. Releia spec.md por completo e liste, RN por RN, quais regras ficam 
+   invalidadas ou precisam mudar de "constante" para "lida de arquivo 
+   externo".
+2. Aponte pelo menos estas ambiguidades novas (e outras que encontrar):
+   - CC-ADM está na tabela mas não tem entrada para hospedagem/
+     representacao — cai na política padrão só nessas categorias, ou 
+     um centro de custo definido nunca herda do padrão?
+   - cambio.json não tem taxa para 2026-07-18 (sábado) — e a despesa 
+     e-004 está datada exatamente nesse dia. Qual taxa usar quando a 
+     data exata não tem cotação publicada?
+3. NÃO escreva código ainda. Primeiro proponha as novas RNs (RN-013 em 
+   diante) e as novas seções AMB para spec.md, no mesmo formato das 
+   existentes. Eu vou revisar e decidir cada uma antes de você editar 
+   o arquivo de verdade.
+```
+
+## Por que pedir "proponha antes de editar"
+
+Essa mudança tem ambiguidades reais demais para deixar a IA decidir e escrever direto na spec sem revisão — é exatamente o momento em que a regra 2 do desafio ("explicação no chat que não está na spec é bug de spec") mais importa, porque o volume de decisões novas é grande e fácil de perder o controle.
+
+## Depois que a spec estiver fechada
+
+A sequência continua sendo: `DECISIONS.md` (uma entrada geral registrando a chegada da v4 e o que ela invalidou) → `tasks.md` (T-013 em diante, numeração contínua — T-012 pode virar o título da seção "Fase 5: Envelope", com T-013+ como as tasks reais) → só então código.
+
+Quer que eu monte o rascunho das novas RNs (RN-013 a RN-016) já com decisões propostas para as ambiguidades que identifiquei, para você revisar em bloco antes de mandar pro Claude Code?
+
+Poderia me ajudar agora sem ser com os prompts e me ajudando a implementar o proximo passo? qual é o arquivo que deve ser alterado agora?
+
+
+Estruturou plano de tarefas com reuso de código e integrações
+Estruturou plano de tarefas com reuso de código e integrações
+Aqui está a proposta de quebra de tasks para a Fase 5 (T-012 vira o título da fase; T-013 em diante são as tasks reais). Organizei para que cada task seja um commit isolado e testável, na ordem que minimiza risco — primeiro a fonte de dados externa, depois cada regra nova isoladamente, só no final a integração no pipeline.
+
+Proposta de estrutura (revise antes de colar)
+markdown
+## Fase 5 — Envelope (Dia 2, Política v4)
+
+- [ ] **T-013** — Implementar leitura da política externa (politica-v4.json) com fallback por categoria.
+  - **Atende:** RN-013, AMB-014
+  - **Aceite:** função que recebe centro de custo + categoria e devolve 
+    o limite aplicável, testada com: CC-COMERCIAL/alimentacao (usa valor 
+    específico), CC-ADM/hospedagem (cai no padrão só nessa categoria), 
+    CC-SUPORTE-N2/qualquer categoria (centro de custo ausente, usa 
+    padrão inteiro).
+  - **Commit:** `<preencher depois>`
+
+- [ ] **T-014** — Suportar a categoria "representacao" como categoria válida condicional ao centro de custo.
+  - **Atende:** RN-014, AMB-015
+  - **Aceite:** despesa e-001 (representacao, CC-COMERCIAL) é aceita e 
+    avaliada contra limite de R$300/dia; a mesma categoria em um centro 
+    de custo sem essa entrada é recusada como categoria_nao_politica.
+  - **Commit:** `<preencher depois>`
+
+- [ ] **T-015** — Tratar categoria com limite zero como não reembolsável no centro de custo.
+  - **Atende:** RN-015
+  - **Aceite:** despesa e-007 (hospedagem, CC-ENG-PLATAFORMA — usar 
+    despesa sintética já que e-007 é CC-COMERCIAL no dataset) resulta em 
+    status recusada, motivo categoria_nao_reembolsavel_no_centro_custo, 
+    não parcialmente_reembolsada com valor zero.
+  - **Commit:** `<preencher depois>`
+
+- [ ] **T-016** — Implementar conversão de moeda estrangeira usando taxa da data da despesa, com fallback para último dia útil anterior.
+  - **Atende:** RN-016, RN-017, AMB-016
+  - **Aceite:** e-002 (EUR 22,00, 2026-07-14, taxa 5,93) converte para 
+    R$130,46; e-004 (EUR 30,00, 2026-07-18, sábado sem cotação) usa a 
+    taxa de 2026-07-17 (5,96) por fallback; e-010 (sem campo moeda) é 
+    tratada como BRL sem conversão.
+  - **Commit:** `<preencher depois>`
+
+- [ ] **T-017** — Integrar política externa, representação, exclusão por centro de custo e câmbio no pipeline `processar_despesas`.
+  - **Atende:** RN-013 a RN-017 (orquestração)
+  - **Aceite:** rodar a CLI com despesas-envelope.json e 
+    despesas-envelope-cc-desconhecido.json produz resultados consistentes 
+    com todas as regras acima, mantendo o comportamento das RN-001 a 
+    RN-012 para os casos que não mudaram (ex: nota fiscal, duplicata, 
+    período continuam funcionando como antes).
+  - **Commit:** `<preencher depois>`
+
+- [ ] **T-018** *(opcional — item C)* — Implementar fila de aprovação manual para valor reembolsável acima de R$500.
+  - **Atende:** item C do comunicado (opcional, não pontua se ausente, 
+    mas pode prejudicar se deixar a spec inconsistente)
+  - **Aceite:** despesa com valor_reembolsavel > R$500 recebe status 
+    pendente_aprovacao em vez de reembolsada; resumo do JSON de saída 
+    ganha uma contagem quantidade_pendente_aprovacao.
+  - **Commit:** `<preencher depois>`
+Por que essa ordem
+T-013 primeiro: é a fundação — todas as outras tasks dependem de conseguir consultar o limite certo por centro de custo/categoria.
+T-014 e T-015 são paralelas entre si mas ambas dependem de T-013 (usam a mesma função de lookup).
+T-016 é isolada — conversão de câmbio não depende de nada das anteriores, só precisa rodar antes de qualquer comparação de valor com limite.
+T-017 é a única que mexe em processar_despesas — junta tudo. Isso separa "implementar a regra isolada" de "religar o pipeline", que é exatamente o padrão que vocês seguiram desde a T-001 até a T-010, e que funcionou bem até aqui (cada bug que achamos foi numa função isolada, testável sozinha, antes de entrar na orquestração).
+T-018 por último e opcional, exatamente como o comunicado pede — só se sobrar tempo, sem comprometer o resto.
+Ponto de atenção antes de você aprovar
+Repare que T-015 usa uma despesa sintética, porque no dataset real fornecido (despesas-envelope.json) não existe nenhuma despesa de hospedagem no centro de custo CC-ENG-PLATAFORMA — o colaborador do exemplo (Rafael Nkemelu) é do CC-COMERCIAL. Isso significa que o teste dessa regra específica vai precisar ser você (ou a IA) construindo um caso de teste do zero, não emprestando direto do JSON de exemplo — vale ficar atento a isso na hora de revisar o código gerado, do mesmo jeito que cobramos precisão nos testes sintéticos anteriores (lembra do bug do valor=0 int em vez de Decimal).
+
+Está de acordo com essa quebra? Se sim, eu já te devolvo o tasks.md completo pronto para substituir o arquivo (mesmo formato do anterior, com a tabela de Cobertura atualizada incluindo RN-013 a RN-017).
+
+sim
+
+
+Assembled comprehensive tasks file with updated metrics
+Assembled comprehensive tasks file with updated metrics
+Pronto. Substitua o specs/001-motor-reembolso/tasks.md local por esse e commite:
+
+cmd
+git add specs/001-motor-reembolso/tasks.md
+git commit -m "docs(tasks): adiciona fase 5 (T-013 a T-018) para envelope da politica v4"
+Próximo passo: T-013 (leitura da política externa)
+Essa é a primeira task de código do envelope — a fundação de que todas as outras dependem. Você quer que eu monte o conteúdo do prompt para o Claude Code, ou prefere ir direto pra implementação e me trazer o resultado para revisão, como vem fazendo nas tasks anteriores?
+
+
+Tasks
+Documento · MD 
+Gostaria de passo a passo agora para fazer os testes, junto com o codigo
+
+
+Arquitetou testes e implementação para validar lógica de políticas
+Arquitetou testes e implementação para validar lógica de políticas
+Vamos direto ao código — teste primeiro, depois implementação, exatamente como fizemos em todas as tasks anteriores.
+
+Passo 1 — Criar o arquivo de teste
+Crie tests/test_politica_externa.py:
+
+python
+import json
+from decimal import Decimal
+from pathlib import Path
+
+from src.reembolso import carregar_politica, obter_limite_categoria
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+POLITICA_PATH = REPO_ROOT / "exemplos" / "envelope" / "politica-v4.json"
+
+
+def _carregar_politica_exemplo():
+    return carregar_politica(POLITICA_PATH)
+
+
+def test_centro_custo_com_valor_especifico_usa_valor_especifico():
+    politica = _carregar_politica_exemplo()
+
+    limite = obter_limite_categoria(politica, "CC-COMERCIAL", "alimentacao")
+
+    assert limite == Decimal("90.00")
+
+
+def test_centro_custo_presente_mas_sem_categoria_cai_no_padrao_dessa_categoria():
+    politica = _carregar_politica_exemplo()
+
+    # CC-ADM define alimentacao e transporte_urbano, mas NÃO define hospedagem
+    limite_hospedagem = obter_limite_categoria(politica, "CC-ADM", "hospedagem")
+    limite_alimentacao = obter_limite_categoria(politica, "CC-ADM", "alimentacao")
+
+    assert limite_hospedagem == Decimal("250.00")  # veio do padrão
+    assert limite_alimentacao == Decimal("45.00")  # veio do valor específico do CC-ADM
+
+
+def test_centro_custo_ausente_da_tabela_usa_padrao_para_todas_categorias():
+    politica = _carregar_politica_exemplo()
+
+    limite = obter_limite_categoria(politica, "CC-SUPORTE-N2", "alimentacao")
+
+    assert limite == Decimal("60.00")
+
+
+def test_limite_zero_e_retornado_como_zero_nao_como_ausencia():
+    politica = _carregar_politica_exemplo()
+
+    limite = obter_limite_categoria(politica, "CC-ENG-PLATAFORMA", "hospedagem")
+
+    assert limite == Decimal("0.00")
+    assert limite is not None
+
+
+def test_categoria_nao_coberta_nem_no_centro_custo_nem_no_padrao_retorna_none():
+    politica = _carregar_politica_exemplo()
+
+    # CC-ADM não define representacao, e o padrão também não define representacao
+    limite = obter_limite_categoria(politica, "CC-ADM", "representacao")
+
+    assert limite is None
+
+
+def test_categoria_valida_apenas_em_centro_custo_especifico():
+    politica = _carregar_politica_exemplo()
+
+    limite_comercial = obter_limite_categoria(politica, "CC-COMERCIAL", "representacao")
+    limite_ausente = obter_limite_categoria(politica, "CC-SUPORTE-N2", "representacao")
+
+    assert limite_comercial == Decimal("300.00")
+    assert limite_ausente is None  # nem CC-SUPORTE-N2 nem o padrão têm representacao
+Passo 2 — Rodar os testes (devem falhar, é o esperado em TDD)
+cmd
+python -m pytest tests/test_politica_externa.py -v
+Vai falhar com ImportError: cannot import name 'carregar_politica' — é o comportamento correto nessa fase (red do TDD).
+
+Passo 3 — Implementar em src/reembolso.py
+Adicione estas duas funções no arquivo (pode ir logo após calcular_limite_diario, por exemplo):
+
+python
+def carregar_politica(caminho: str | Path) -> dict:
+    path = Path(caminho)
+    with path.open("r", encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+def obter_limite_categoria(
+    politica: dict, centro_custo: str, categoria: str
+) -> Decimal | None:
+    centros_custo = politica.get("centros_custo", {})
+    tabela_especifica = centros_custo.get(centro_custo, {})
+
+    if categoria in tabela_especifica:
+        return Decimal(str(tabela_especifica[categoria]["limite"]))
+
+    tabela_padrao = politica.get("padrao", {})
+    if categoria in tabela_padrao:
+        return Decimal(str(tabela_padrao[categoria]["limite"]))
+
+    return None
+Não precisa de nenhum import novo — json, Decimal e Path já estão no topo do arquivo.
+
+Passo 4 — Rodar os testes de novo (devem passar agora)
+cmd
+python -m pytest tests/test_politica_externa.py -v
+Deve dar 6 passed. Se algum falhar, me manda a saída exata do erro antes de seguir — não corrija no escuro.
+
+Passo 5 — Rodar a suíte inteira, garantindo que nada quebrou
+cmd
+python -m pytest -v
+Deve dar 38 passed (32 anteriores + 6 novos).
+
+Ponto de atenção antes de commitar
+Repare no teste test_categoria_nao_coberta_nem_no_centro_custo_nem_no_padrao_retorna_none — ele confirma que obter_limite_categoria devolve None quando a categoria simplesmente não existe em lugar nenhum (nem específico, nem padrão). Isso é diferente de "limite zero" (CC-ENG-PLATAFORMA/hospedagem), que é um valor real e válido. Essa distinção None vs Decimal("0.00") é exatamente o que vai permitir, na T-015, diferenciar "categoria não existe na política" (recusar como categoria_nao_politica, RN-001/RN-014) de "categoria existe mas com limite zero" (recusar como categoria_nao_reembolsavel_no_centro_custo, RN-015) — são motivos de recusa diferentes.
+
+Commit
+Sem mudança de spec — RN-013/AMB-014 já estavam definidas antes de codar:
+
+cmd
+git add src/reembolso.py tests/test_politica_externa.py
+git commit -m "feat(T-013): le politica externa com fallback por categoria (RN-013)"
+Depois disso, marque T-013 como concluída no tasks.md e preencha o commit real, e me avise para seguirmos com T-014 (categoria "representacao") no mesmo formato passo a passo.
+
+(.venv) C:\Users\Samsung\Desktop\desafio-sdd\sdd-desafio>python -m pytest -v =================== test session starts =================== platform win32 -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\Samsung\AppData\Local\Programs\Python\Python312\python.exe cachedir: .pytest_cache root
+
+pasted
+
+
+from __future__ import annotations import json from dataclasses import dataclass from decimal import Decimal, ROUND_HALF_UP from pathlib import Path @dataclass(frozen=True) class Despesa: id: str data: str categoria: str descricao: str fornecedor: str valor_
+
+pasted
+
+agora deu certo, mas qual deve ser o commit?
+
+import json
+from decimal import Decimal
+from pathlib import Path
+
+from src.reembolso import carregar_politica, obter_limite_categoria
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+POLITICA_PATH = REPO_ROOT / "exemplos" / "envelope" / "politica-v4.json"
+
+
+def _carregar_politica_exemplo():
+    return carregar_politica(POLITICA_PATH)
+
+
+def test_centro_custo_com_valor_especifico_usa_valor_especifico():
+    politica = _carregar_politica_exemplo()
+
+    limite = obter_limite_categoria(politica, "CC-COMERCIAL", "alimentacao")
+
+    assert limite == Decimal("90.00")
+
+
+def test_centro_custo_presente_mas_sem_categoria_cai_no_padrao_dessa_categoria():
+    politica = _carregar_politica_exemplo()
+
+    # CC-ADM define alimentacao e transporte_urbano, mas NÃO define hospedagem
+    limite_hospedagem = obter_limite_categoria(politica, "CC-ADM", "hospedagem")
+    limite_alimentacao = obter_limite_categoria(politica, "CC-ADM", "alimentacao")
+
+    assert limite_hospedagem == Decimal("250.00")  # veio do padrão
+    assert limite_alimentacao == Decimal("45.00")  # veio do valor específico do CC-ADM
+
+
+def test_centro_custo_ausente_da_tabela_usa_padrao_para_todas_categorias():
+    politica = _carregar_politica_exemplo()
+
+    limite = obter_limite_categoria(politica, "CC-SUPORTE-N2", "alimentacao")
+
+    assert limite == Decimal("60.00")
+
+
+def test_limite_zero_e_retornado_como_zero_nao_como_ausencia():
+    politica = _carregar_politica_exemplo()
+
+    limite = obter_limite_categoria(politica, "CC-ENG-PLATAFORMA", "hospedagem")
+
+    assert limite == Decimal("0.00")
+    assert limite is not None
+
+
+def test_categoria_nao_coberta_nem_no_centro_custo_nem_no_padrao_retorna_none():
+    politica = _carregar_politica_exemplo()
+
+    # CC-ADM não define representacao, e o padrão também não define representacao
+    limite = obter_limite_categoria(politica, "CC-ADM", "representacao")
+
+    assert limite is None
+
+
+def test_categoria_valida_apenas_em_centro_custo_especifico():
+    politica = _carregar_politica_exemplo()
+
+    limite_comercial = obter_limite_categoria(politica, "CC-COMERCIAL", "representacao")
+    limite_ausente = obter_limite_categoria(politica, "CC-SUPORTE-N2", "representacao")
+
+    assert limite_comercial == Decimal("300.00")
+    assert limite_ausente is None  # nem CC-SUPORTE-N2 nem o padrão têm representacao
+Mostrar mais
+
+Deliberou sobre sequência de execução dos passos anteriores
+Deliberou sobre sequência de execução dos passos anteriores
+O próximo passo é implementar a T-015 — os passos completos (teste + código) já estão prontos na minha mensagem anterior. Aqui está o resumo rápido para executar agora:
+
+1. Criar o teste — tests/test_categoria_nao_reembolsavel.py
+python
+from decimal import Decimal
+from pathlib import Path
+
+from src.reembolso import Despesa, carregar_politica, validar_limite_nao_zero
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+POLITICA_PATH = REPO_ROOT / "exemplos" / "envelope" / "politica-v4.json"
+
+
+def _carregar_politica_exemplo():
+    return carregar_politica(POLITICA_PATH)
+
+
+def _despesa_hospedagem() -> Despesa:
+    return Despesa(
+        id="e-teste-hospedagem",
+        data="2026-07-15",
+        categoria="hospedagem",
+        descricao="Hotel - 2 diarias",
+        fornecedor="Hotel Exemplo",
+        valor_original=Decimal("300.00"),
+        tem_nota_fiscal=True,
+    )
+
+
+def test_hospedagem_com_limite_zero_e_recusada_integralmente():
+    politica = _carregar_politica_exemplo()
+    despesa = _despesa_hospedagem()
+
+    valido, motivo = validar_limite_nao_zero(despesa, "CC-ENG-PLATAFORMA", politica)
+
+    assert valido is False
+    assert motivo == "categoria_nao_reembolsavel_no_centro_custo"
+
+
+def test_hospedagem_com_limite_positivo_nao_e_recusada_por_essa_regra():
+    politica = _carregar_politica_exemplo()
+    despesa = _despesa_hospedagem()
+
+    valido, motivo = validar_limite_nao_zero(despesa, "CC-COMERCIAL", politica)
+
+    assert valido is True
+    assert motivo is None
+
+
+def test_categoria_inexistente_no_centro_custo_nao_e_pega_por_essa_regra():
+    politica = _carregar_politica_exemplo()
+    despesa = Despesa(
+        id="e-teste-representacao",
+        data="2026-07-15",
+        categoria="representacao",
+        descricao="teste",
+        fornecedor="teste",
+        valor_original=Decimal("50.00"),
+        tem_nota_fiscal=True,
+    )
+
+    valido, motivo = validar_limite_nao_zero(despesa, "CC-SUPORTE-N2", politica)
+
+    assert valido is True
+    assert motivo is None
+2. Rodar (deve falhar)
+cmd
+python -m pytest tests/test_categoria_nao_reembolsavel.py -v
+3. Implementar em src/reembolso.py (após validar_categoria_por_politica)
+python
+def validar_limite_nao_zero(
+    despesa: Despesa, centro_custo: str, politica: dict
+) -> tuple[bool, str | None]:
+    limite = obter_limite_categoria(politica, centro_custo, despesa.categoria)
+
+    if limite is not None and limite == Decimal("0.00"):
+        return False, "categoria_nao_reembolsavel_no_centro_custo"
+
+    return True, None
+4. Rodar de novo (deve passar — 3 novos)
+cmd
+python -m pytest tests/test_categoria_nao_reembolsavel.py -v
+5. Suíte completa
+cmd
+python -m pytest -v
+Deve dar 46 passed (43 anteriores + 3 novos).
+
+6. Commit
+cmd
+git add src/reembolso.py tests/test_categoria_nao_reembolsavel.py
+git commit -m "feat(T-015): recusa categoria com limite zero no centro de custo (RN-015)"
+Roda esses passos e me manda o resultado do pytest -v para eu revisar antes de você marcar T-015 como concluída no tasks.md — depois seguimos para a T-016 (conversão de câmbio, a mais complexa que resta).
+
+certo, e agora o proximo passo?
+
+
+Ponderou entre solicitar confirmação prévia ou avançar com próximas instruções
+Ponderou entre solicitar confirmação prévia ou avançar com próximas instruções
+Antes de avançar, preciso confirmar que a T-015 rodou certinho — nas últimas vezes você colou o output do pytest para eu revisar antes de seguir, e isso pegou bugs reais (arredondamento, falso positivo de viagem, limite de hospedagem ausente). Não quero pular essa checagem justo agora.
+
+Você já rodou os passos que te passei (criar tests/test_categoria_nao_reembolsavel.py, implementar validar_limite_nao_zero, rodar pytest -v)?
+
+Se sim: cola aqui o resultado do pytest -v (deve mostrar 46 passed) para eu confirmar antes de você commitar e seguirmos para a T-016.
+Se ainda não: os passos completos estão na mensagem anterior — pode executar agora e trazer o resultado.
+Assim que confirmar T-015, o próximo passo é a T-016 (conversão de câmbio) — a mais complexa que resta, porque envolve buscar a taxa da data exata da despesa com fallback para o último dia útil anterior quando a data não tem cotação (caso da despesa e-004, datada num sábado). Vou preparar o passo a passo dela assim que T-015 estiver confirmada.
