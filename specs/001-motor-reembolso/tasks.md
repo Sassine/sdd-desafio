@@ -101,10 +101,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_casos_de_borda` — 18 casos passam, cada um identificado pelo ID da regra no parâmetro
   - **Commit:** `pendente`
 
-- [ ] **T-017** — Fronteiras testadas dos dois lados: R$ 100,00/R$ 100,01 e R$ 60,00/R$ 60,01
+- [x] **T-017** — Fronteiras testadas dos dois lados: R$ 100,00/R$ 100,01 e R$ 60,00/R$ 60,01
   - **Atende:** RN-006, RN-007, `plan.md` §6
   - **Aceite:** `test_fronteiras_inclusivas_e_exclusivas` — os quatro casos passam com os valores da spec
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-018** — Lista de despesas vazia produz resultado válido com todos os totais em `0.00`
   - **Atende:** `spec.md` §7 (última linha)
