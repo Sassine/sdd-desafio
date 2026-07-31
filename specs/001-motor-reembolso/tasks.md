@@ -74,10 +74,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_rn_006_piso_e_exclusivo` — R$ 100,00 sem nota segue para o teto; `test_rn_006_acima_do_piso_sem_nota_e_recusada` — R$ 100,01 sem nota resulta em `0.00`
   - **Commit:** `pendente`
 
-- [ ] **T-012** — RN-007: teto por despesa e reembolso parcial com glosa do excedente
+- [x] **T-012** — RN-007: teto por despesa e reembolso parcial com glosa do excedente
   - **Atende:** RN-007, AMB-001, AMB-002
   - **Aceite:** `test_rn_007_teto_e_por_despesa_nao_por_dia` — R$ 72,50 e R$ 38,00 no mesmo dia resultam em R$ 60,00 e R$ 38,00; `test_rn_007_valor_no_teto_e_aprovado_integralmente` — R$ 60,00 sai como `aprovada` sem glosa
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-013** — RN-008: cada lançamento de hospedagem vale uma diária; descrição não é interpretada
   - **Atende:** RN-008, AMB-007

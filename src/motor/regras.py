@@ -114,3 +114,41 @@ def rn_006_nota_fiscal(despesa: Despesa, contexto: Contexto) -> Parecer | None:
             "que nao foi declarada."
         ),
     )
+
+
+def rn_007_teto_categoria(despesa: Despesa, contexto: Contexto) -> Parecer:
+    """RN-007/RN-008/RN-009 — teto por despesa, nunca por soma do dia (AMB-001).
+
+    Reembolsa o teto e glosa o excedente (AMB-002). Em data de viagem, o teto
+    é ampliado em 50% (RN-009); hospedagem conta como uma diária, qualquer
+    que seja o texto da descrição (RN-008). É o último passo da spec §8:
+    sempre decide, nunca devolve None.
+    """
+    teto = politica.TETOS[despesa.categoria]
+    regras_aplicadas = ["RN-007"]
+    if despesa.categoria == "hospedagem":
+        regras_aplicadas.append("RN-008")
+    if despesa.data in contexto.datas_em_viagem:
+        teto = (teto * politica.FATOR_VIAGEM).quantize(Decimal("0.01"))
+        regras_aplicadas.append("RN-009")
+
+    if despesa.valor <= teto:
+        return Parecer(
+            despesa=despesa,
+            valor_reembolsavel=despesa.valor,
+            status=Status.APROVADA,
+            regras_aplicadas=tuple(regras_aplicadas),
+            justificativa=f"Valor dentro do teto de R$ {teto:.2f} para {despesa.categoria}.",
+        )
+
+    excedente = despesa.valor - teto
+    return Parecer(
+        despesa=despesa,
+        valor_reembolsavel=teto,
+        status=Status.PARCIAL,
+        regras_aplicadas=tuple(regras_aplicadas),
+        justificativa=(
+            f"Valor acima do teto de R$ {teto:.2f} para {despesa.categoria}. "
+            f"Excedente de R$ {excedente:.2f} glosado."
+        ),
+    )
