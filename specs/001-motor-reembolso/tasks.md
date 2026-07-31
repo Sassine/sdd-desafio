@@ -128,10 +128,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_cli_calcular_escreve_saida` — o comando cria o arquivo de saída e retorna código 0; entrada inválida retorna código diferente de 0 sem criar o arquivo
   - **Commit:** `pendente`
 
-- [ ] **T-022** — Teste ponta a ponta sobre `exemplos/despesas-exemplo.json`
+- [x] **T-022** — Teste ponta a ponta sobre `exemplos/despesas-exemplo.json`
   - **Atende:** `spec.md` §9 (critérios 1 a 8)
   - **Aceite:** `test_e2e_exemplo_oficial` — total reembolsável `703.43` sobre total lançado `1816.84`, com os valores por item que a spec §9 fixa para `d-003`, `d-004`, `d-006`, `d-007`, `d-010`, `d-011` e `d-014`
-  - **Commit:**
+  - **Commit:** `pendente`
 
 ---
 

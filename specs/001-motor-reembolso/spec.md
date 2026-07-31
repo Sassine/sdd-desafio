@@ -393,16 +393,16 @@ despesas como veio na entrada, e não é afetada por recusas ocorridas nos passo
 
 O sistema está pronto quando:
 
-- [ ] Processa `exemplos/despesas-exemplo.json` e produz total reembolsável de **R$ 703,43** sobre total lançado de **R$ 1.816,84**.
-- [ ] Cada uma das 14 despesas do exemplo aparece no resultado com status, valor e justificativa.
-- [ ] `d-003` (R$ 100,00 sem nota) é reembolsada em R$ 80,00 e `d-004` (R$ 100,01 sem nota) em R$ 0,00.
-- [ ] `d-006` é reembolsada em R$ 54,90 e `d-007`, sua duplicata, em R$ 0,00.
-- [ ] `d-010` é reembolsada em R$ 375,00, com o teto ampliado por viagem.
-- [ ] `d-011` aparece como R$ 33,33 e não como R$ 33,333.
-- [ ] `d-014` é reconhecida como alimentação apesar da caixa alta e reembolsada em R$ 60,00.
-- [ ] A soma dos `valor_reembolsavel` dos itens é igual a `resumo.total_reembolsavel`.
-- [ ] Toda regra de RN-001 a RN-010 tem ao menos um caso de teste que a exercita.
-- [ ] Entrada com campo obrigatório ausente é rejeitada com mensagem, sem produzir resultado parcial.
+- [x] Processa `exemplos/despesas-exemplo.json` e produz total reembolsável de **R$ 703,43** sobre total lançado de **R$ 1.816,84**.
+- [x] Cada uma das 14 despesas do exemplo aparece no resultado com status, valor e justificativa.
+- [x] `d-003` (R$ 100,00 sem nota) é reembolsada em R$ 80,00 e `d-004` (R$ 100,01 sem nota) em R$ 0,00.
+- [x] `d-006` é reembolsada em R$ 54,90 e `d-007`, sua duplicata, em R$ 0,00.
+- [x] `d-010` é reembolsada em R$ 375,00, com o teto ampliado por viagem.
+- [x] `d-011` aparece como R$ 33,33 e não como R$ 33,333.
+- [x] `d-014` é reconhecida como alimentação apesar da caixa alta e reembolsada em R$ 60,00.
+- [x] A soma dos `valor_reembolsavel` dos itens é igual a `resumo.total_reembolsavel`.
+- [x] Toda regra de RN-001 a RN-010 tem ao menos um caso de teste que a exercita.
+- [x] Entrada com campo obrigatório ausente é rejeitada com mensagem, sem produzir resultado parcial.
 
 ## 10. O que fica em aberto
 
