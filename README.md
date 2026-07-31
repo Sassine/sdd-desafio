@@ -4,8 +4,8 @@ CLI que lê um JSON de despesas de um colaborador e emite um JSON com o valor
 reembolsável e a justificativa de cada item, segundo a Política de Reembolso de
 Despesas v3.
 
-> **Status:** especificação fechada (`spec.md` 1.0, `plan.md` 1.0, 22 tasks).
-> Implementação em andamento — ver o progresso em
+> **Status:** especificação fechada (`spec.md` 1.1, `plan.md` 1.0) e as 22 tasks
+> da implementação base concluídas — 94 testes verdes. Ver o detalhe em
 > [`specs/001-motor-reembolso/tasks.md`](specs/001-motor-reembolso/tasks.md).
 
 ---
