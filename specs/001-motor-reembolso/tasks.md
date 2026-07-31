@@ -123,10 +123,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_soma_dos_itens_bate_com_o_resumo` — a soma dos `valor_reembolsavel` dos itens é idêntica a `resumo.total_reembolsavel`
   - **Commit:** `pendente`
 
-- [ ] **T-021** — CLI: `calcular --input <arquivo> --output <arquivo>`
+- [x] **T-021** — CLI: `calcular --input <arquivo> --output <arquivo>`
   - **Atende:** contrato fixo do `DESAFIO.md`
   - **Aceite:** `test_cli_calcular_escreve_saida` — o comando cria o arquivo de saída e retorna código 0; entrada inválida retorna código diferente de 0 sem criar o arquivo
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-022** — Teste ponta a ponta sobre `exemplos/despesas-exemplo.json`
   - **Atende:** `spec.md` §9 (critérios 1 a 8)
