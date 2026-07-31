@@ -69,10 +69,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_rn_005_estorno_abate_valor_integral` — −R$ 45,00 resulta em −R$ 45,00, status `estorno`; e −R$ 500,00 em alimentação não é limitado pelo teto
   - **Commit:** `pendente`
 
-- [ ] **T-011** — RN-006: nota fiscal obrigatória acima de R$ 100,00, comparação estrita, recusa integral na ausência
+- [x] **T-011** — RN-006: nota fiscal obrigatória acima de R$ 100,00, comparação estrita, recusa integral na ausência
   - **Atende:** RN-006, AMB-003, AMB-004, AMB-005
   - **Aceite:** `test_rn_006_piso_e_exclusivo` — R$ 100,00 sem nota segue para o teto; `test_rn_006_acima_do_piso_sem_nota_e_recusada` — R$ 100,01 sem nota resulta em `0.00`
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-012** — RN-007: teto por despesa e reembolso parcial com glosa do excedente
   - **Atende:** RN-007, AMB-001, AMB-002

@@ -94,3 +94,23 @@ def rn_005_estorno(despesa: Despesa, contexto: Contexto) -> Parecer | None:
         regras_aplicadas=("RN-005",),
         justificativa="Estorno: valor negativo abatido integralmente do total, sem teto e sem exigencia de nota fiscal.",
     )
+
+
+def rn_006_nota_fiscal(despesa: Despesa, contexto: Contexto) -> Parecer | None:
+    """RN-006 — nota fiscal obrigatória, estritamente acima do piso (AMB-003/004/005).
+
+    Avaliada sobre o valor lançado, antes do teto (AMB-005). O piso não é
+    ampliado por viagem (AMB-006).
+    """
+    if despesa.valor <= politica.PISO_NOTA_FISCAL or despesa.tem_nota_fiscal:
+        return None
+    return Parecer(
+        despesa=despesa,
+        valor_reembolsavel=ZERO,
+        status=Status.RECUSADA,
+        regras_aplicadas=("RN-006",),
+        justificativa=(
+            f"Valor acima de R$ {politica.PISO_NOTA_FISCAL:.2f} exige nota fiscal, "
+            "que nao foi declarada."
+        ),
+    )
