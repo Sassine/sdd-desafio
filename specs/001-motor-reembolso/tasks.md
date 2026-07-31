@@ -106,10 +106,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_fronteiras_inclusivas_e_exclusivas` — os quatro casos passam com os valores da spec
   - **Commit:** `pendente`
 
-- [ ] **T-018** — Lista de despesas vazia produz resultado válido com todos os totais em `0.00`
+- [x] **T-018** — Lista de despesas vazia produz resultado válido com todos os totais em `0.00`
   - **Atende:** `spec.md` §7 (última linha)
   - **Aceite:** `test_lista_vazia_produz_resultado_valido` — saída bem formada, sem exceção
-  - **Commit:**
+  - **Commit:** `pendente`
 
 ## Fase 4 — Saída e CLI
 
