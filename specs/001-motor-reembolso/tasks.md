@@ -64,10 +64,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_rn_004_duplicata_exata_recusa_a_segunda` — duas despesas iguais em data, categoria, fornecedor, descrição e valor resultam em R$ 54,90 e R$ 0,00; e `test_rn_004_fornecedor_diferente_nao_e_duplicata` passa
   - **Commit:** `pendente`
 
-- [ ] **T-010** — RN-005: estornos — valor negativo abate integral, sem teto e sem nota
+- [x] **T-010** — RN-005: estornos — valor negativo abate integral, sem teto e sem nota
   - **Atende:** RN-005, AMB-010
   - **Aceite:** `test_rn_005_estorno_abate_valor_integral` — −R$ 45,00 resulta em −R$ 45,00, status `estorno`; e −R$ 500,00 em alimentação não é limitado pelo teto
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-011** — RN-006: nota fiscal obrigatória acima de R$ 100,00, comparação estrita, recusa integral na ausência
   - **Atende:** RN-006, AMB-003, AMB-004, AMB-005

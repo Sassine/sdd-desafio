@@ -81,3 +81,16 @@ def criar_rn_004_duplicata() -> Callable[[Despesa, Contexto], Parecer | None]:
         return None
 
     return regra
+
+
+def rn_005_estorno(despesa: Despesa, contexto: Contexto) -> Parecer | None:
+    """RN-005 — valor negativo é estorno: abate integral, sem teto e sem nota (AMB-010)."""
+    if despesa.valor >= ZERO:
+        return None
+    return Parecer(
+        despesa=despesa,
+        valor_reembolsavel=despesa.valor,
+        status=Status.ESTORNO,
+        regras_aplicadas=("RN-005",),
+        justificativa="Estorno: valor negativo abatido integralmente do total, sem teto e sem exigencia de nota fiscal.",
+    )
