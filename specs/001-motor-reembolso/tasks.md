@@ -143,7 +143,8 @@
   - **Aceite:** despesa com valor_reembolsavel > R$500 recebe status
     pendente_aprovacao em vez de reembolsada; resumo do JSON de saída
     ganha uma contagem quantidade_pendente_aprovacao.
-  - **Commit:** `<preencher depois>`
+  - **Status:** Não implementada (ver DEC-018).
+  - **Commit:** Não realizado.
 
 ---
 

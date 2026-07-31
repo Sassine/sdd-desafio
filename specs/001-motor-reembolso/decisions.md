@@ -213,3 +213,11 @@ Cada entrada deve registrar:
 - **Decisão final:** despesa com moeda sem cotação disponível recebe
   status recusada, motivo cambio_indisponivel, justificativa "Não há
   cotação de câmbio disponível para a moeda desta despesa."
+
+### DEC-018 — Adiamento da fila de aprovação manual (item opcional)
+
+- **Data:** 2026-07-31
+- **Resumo da mudança:** Decidido não implementar a fila de aprovação manual prevista no item C do comunicado da política v4.
+- **Motivo:** O comunicado classifica explicitamente essa funcionalidade como opcional. Foi priorizada a conclusão dos requisitos obrigatórios da política v4, mantendo a consistência entre specification, implementação e suíte de testes.
+- **Impacto na spec / tasks / testes:** A T-018 permanece não implementada. Nenhum teste foi criado para essa funcionalidade e o JSON de saída continua utilizando apenas os estados previstos na implementação atual (`reembolsada`, `parcialmente_reembolsada`, `recusada` e `ignorada`).
+- **Decisão final:** A fila de aprovação manual fica registrada como melhoria futura e não faz parte desta entrega.
