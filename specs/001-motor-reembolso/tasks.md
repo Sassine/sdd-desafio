@@ -116,22 +116,22 @@ a ordem de aplicação da spec §8.
 - [x] **T-019** — Serializador: `Decimal` como texto de duas casas, `Status` em minúsculas, `valor_glosado` derivado
   - **Atende:** `spec.md` §4 (saída)
   - **Aceite:** `test_serializa_valores_como_texto_de_duas_casas` — `Decimal("60")` sai como `"60.00"`; nenhum `Decimal` cru chega ao `json.dump`
-  - **Commit:** `pendente`
+  - **Commit:** `fef1c39`
 
 - [x] **T-020** — Resumo: totais lançado, reembolsável e glosado, mais contagem por status
   - **Atende:** `spec.md` §4, §9 (penúltimo critério)
   - **Aceite:** `test_soma_dos_itens_bate_com_o_resumo` — a soma dos `valor_reembolsavel` dos itens é idêntica a `resumo.total_reembolsavel`
-  - **Commit:** `pendente`
+  - **Commit:** `55ff10a`
 
 - [x] **T-021** — CLI: `calcular --input <arquivo> --output <arquivo>`
   - **Atende:** contrato fixo do `DESAFIO.md`
   - **Aceite:** `test_cli_calcular_escreve_saida` — o comando cria o arquivo de saída e retorna código 0; entrada inválida retorna código diferente de 0 sem criar o arquivo
-  - **Commit:** `pendente`
+  - **Commit:** `9012a18`
 
 - [x] **T-022** — Teste ponta a ponta sobre `exemplos/despesas-exemplo.json`
   - **Atende:** `spec.md` §9 (critérios 1 a 8)
   - **Aceite:** `test_e2e_exemplo_oficial` — total reembolsável `703.43` sobre total lançado `1816.84`, com os valores por item que a spec §9 fixa para `d-003`, `d-004`, `d-006`, `d-007`, `d-010`, `d-011` e `d-014`
-  - **Commit:** `pendente`
+  - **Commit:** `ac39242`
 
 ---
 
