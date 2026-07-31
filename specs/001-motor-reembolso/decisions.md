@@ -195,3 +195,21 @@ Cada entrada deve registrar:
   cotação mais recente disponível, não apenas lookup direto por data.
 - **Decisão final:** busca a cotação mais recente com data <= data da
   despesa, dentro das taxas disponíveis em cambio.json.
+
+### DEC-017 — Despesa recusada quando câmbio da moeda está totalmente ausente
+
+- **Data:** 2026-07-30
+- **Resumo da mudança:** Definido que despesas em moeda sem nenhuma
+  cotação disponível em cambio.json (não apenas data ausente, mas
+  moeda inteira ausente) são recusadas com motivo cambio_indisponivel.
+- **Motivo:** teste da T-017 revelou que despesa e-006
+  (despesas-envelope.json) está em GBP, moeda ausente de todas as
+  entradas de cambio.json — converter_para_brl lançava exceção não
+  tratada, interrompendo o processamento de todas as despesas.
+- **Impacto na spec / tasks / testes:** spec.md ganhou RN-018/AMB-017;
+  processar_despesas_v4 captura ValueError de converter_para_brl e
+  recusa a despesa individualmente, sem interromper o processamento
+  das demais.
+- **Decisão final:** despesa com moeda sem cotação disponível recebe
+  status recusada, motivo cambio_indisponivel, justificativa "Não há
+  cotação de câmbio disponível para a moeda desta despesa."
