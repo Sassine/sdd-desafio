@@ -116,6 +116,16 @@ def rn_006_nota_fiscal(despesa: Despesa, contexto: Contexto) -> Parecer | None:
     )
 
 
+def construir_contexto(despesas: tuple[Despesa, ...], competencia: str) -> Contexto:
+    """RN-009 — viagem é inferida por hospedagem na mesma data, aprovada ou
+    não (AMB-006). Calculada uma vez sobre a lista como veio na entrada,
+    antes de qualquer recusa dos passos 3 a 7 (spec.md §8, DT-004)."""
+    datas_em_viagem = frozenset(
+        despesa.data for despesa in despesas if despesa.categoria.strip().lower() == "hospedagem"
+    )
+    return Contexto(competencia=competencia, datas_em_viagem=datas_em_viagem)
+
+
 def rn_007_teto_categoria(despesa: Despesa, contexto: Contexto) -> Parecer:
     """RN-007/RN-008/RN-009 — teto por despesa, nunca por soma do dia (AMB-001).
 

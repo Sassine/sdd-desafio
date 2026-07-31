@@ -84,10 +84,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_rn_008_hospedagem_conta_como_uma_diaria` — R$ 480,00 descrita como "2 diarias", fora de viagem, resulta em R$ 250,00
   - **Commit:** `pendente`
 
-- [ ] **T-014** — RN-009: `Contexto` de viagem — datas com lançamento de hospedagem ampliam os tetos em 50%
+- [x] **T-014** — RN-009: `Contexto` de viagem — datas com lançamento de hospedagem ampliam os tetos em 50%
   - **Atende:** RN-009, AMB-006
   - **Aceite:** `test_rn_009_data_com_hospedagem_amplia_tetos` — R$ 480,00 em `2026-07-14` resulta em R$ 375,00; `test_rn_009_hospedagem_recusada_ainda_caracteriza_viagem` passa; `test_rn_009_viagem_nao_amplia_piso_da_nota` passa
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-015** — Calculadora: encadeia as regras na ordem da spec §8, parando na primeira que recusa
   - **Atende:** `spec.md` §8, RN-001 a RN-010
