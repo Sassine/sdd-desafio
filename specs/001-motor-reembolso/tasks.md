@@ -89,10 +89,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_rn_009_data_com_hospedagem_amplia_tetos` — R$ 480,00 em `2026-07-14` resulta em R$ 375,00; `test_rn_009_hospedagem_recusada_ainda_caracteriza_viagem` passa; `test_rn_009_viagem_nao_amplia_piso_da_nota` passa
   - **Commit:** `pendente`
 
-- [ ] **T-015** — Calculadora: encadeia as regras na ordem da spec §8, parando na primeira que recusa
+- [x] **T-015** — Calculadora: encadeia as regras na ordem da spec §8, parando na primeira que recusa
   - **Atende:** `spec.md` §8, RN-001 a RN-010
   - **Aceite:** `test_ordem_nota_fiscal_antes_do_teto` — `d-004` (R$ 100,01, transporte, sem nota) resulta em `0.00` e **não** em R$ 80,00, provando que o passo 7 roda antes do 8
-  - **Commit:**
+  - **Commit:** `pendente`
 
 ## Fase 3 — Casos de borda
 
