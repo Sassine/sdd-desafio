@@ -1,6 +1,6 @@
 # Sessao 03-implementacao-t001-t022
 
-**Periodo:** 2026-07-30T23:44 a 00:59 · **Registros:** 826
+**Periodo:** 2026-07-30T23:44 a 00:59 · **Registros:** 837
 **Origem:** `da3fa182-7846-4b20-8d1d-ccabbd174814.jsonl` (copia crua no mesmo diretorio)
 
 > Renderizacao legivel do transcript. O `.jsonl` ao lado e a fonte
@@ -4285,3 +4285,67 @@ Cresceu desde a última exportação. Rodando o script novamente para substituir
 {"command": "cd \"c:\\Users\\vitor\\Documents\\sdd-desafio\" && python docs/sessions/_exportar.py 2>&1"}
 ```
 </details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+exportada: 01-abertura-interrompida
+exportada: 02-especificacao-spec-plan-tasks
+exportada: 03-implementacao-t001-t022
+```
+</details>
+
+<details><summary>🔧 <code>Bash</code></summary>
+
+```json
+{"command": "cd \"c:\\Users\\vitor\\Documents\\sdd-desafio\" && git status --short && git diff --stat -- docs/sessions/"}
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+M docs/sessions/03-implementacao-t001-t022.jsonl
+ M docs/sessions/03-implementacao-t001-t022.md
+ docs/sessions/03-implementacao-t001-t022.jsonl |  78 ++++++
+ docs/sessions/03-implementacao-t001-t022.md    | 365 ++++++++++++++++++++++++-
+ 2 files changed, 442 insertions(+), 1 deletion(-)
+```
+</details>
+
+### Claude
+
+Só a sessão 03 mudou (78 registros novos, cobrindo a discussão sobre granularidade de commit e o registro no `HANDOFF.md`). Sessões 01 e 02 continuam idênticas. Commitando a substituição.
+
+<details><summary>🔧 <code>Bash</code></summary>
+
+```json
+{"command": "cd \"c:\\Users\\vitor\\Documents\\sdd-desafio\" && git add docs/sessions/03-implementacao-t001-t022.jsonl docs/sessions/03-implementacao-t001-t022.md && git commit -m \"docs(sessions): reexporta sessao 03 antes de encerrar o Dia 1 tarde\n\nSubstitui a copia anterior pelo transcript completo, incluindo a\ndiscussao sobre granularidade de commit test/feat e o registro dessa\npendencia n …(truncado)
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+[main e025389] docs(sessions): reexporta sessao 03 antes de encerrar o Dia 1 tarde
+ 2 files changed, 442 insertions(+), 1 deletion(-)
+```
+</details>
+
+<details><summary>🔧 <code>Bash</code></summary>
+
+```json
+{"command": "cd \"c:\\Users\\vitor\\Documents\\sdd-desafio\" && git status --short"}
+```
+</details>
+
+<details><summary>↩️ resultado</summary>
+
+```
+(Bash completed with no output)
+```
+</details>
+
+### Claude
+
+Substituído e commitado (`e025389`) — working tree limpo. Assim como antes, esta troca final ("exporta novamente..." + minha resposta) não entra nesta cópia, pela mesma limitação estrutural já documentada: a exportação nunca alcança a própria mensagem que a disparou. Se quiser um snapshot 100% fechado do Dia 1 tarde, é só pedir mais uma rodada depois desta resposta — fora isso, está tudo pronto para o Dia 2.
