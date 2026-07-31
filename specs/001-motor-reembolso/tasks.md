@@ -100,21 +100,24 @@
     continua recusada).
   - **Commit:** `feat(T-014): valida categoria via politica externa, incluindo representacao (RN-014)`
 
-- [ ] **T-015** — Tratar categoria com limite zero como não reembolsável no centro de custo.
+- [x] **T-015** — Tratar categoria com limite zero como não reembolsável no centro de custo.
   - **Atende:** RN-015
-  - **Aceite:** despesa sintética de hospedagem no CC-ENG-PLATAFORMA
-    (nenhuma existe no dataset fornecido) resulta em status recusada,
-    motivo categoria_nao_reembolsavel_no_centro_custo — não
-    parcialmente_reembolsada com valor zero.
-  - **Commit:** `<preencher depois>`
+  - **Aceite:** testes em `tests/test_categoria_nao_reembolsavel.py` (3
+    casos: hospedagem com limite zero no CC-ENG-PLATAFORMA recusada
+    integralmente com motivo categoria_nao_reembolsavel_no_centro_custo,
+    hospedagem com limite positivo não recusada por essa regra,
+    categoria inexistente no centro de custo não é confundida com
+    limite zero — permanece escopo da T-014).
+  - **Commit:** `feat(T-015): recusa categoria com limite zero no centro de custo (RN-015)`
 
-- [ ] **T-016** — Implementar conversão de moeda estrangeira usando taxa da data da despesa, com fallback para último dia útil anterior.
+- [x] **T-016** — Implementar conversão de moeda estrangeira usando taxa da data da despesa, com fallback para último dia útil anterior.
   - **Atende:** RN-016, RN-017, AMB-016
-  - **Aceite:** e-002 (EUR 22,00, 2026-07-14, taxa 5,93) converte para
-    R$130,46; e-004 (EUR 30,00, 2026-07-18, sábado sem cotação) usa a
-    taxa de 2026-07-17 (5,96) por fallback; e-010 (sem campo moeda) é
-    tratada como BRL sem conversão.
-  - **Commit:** `<preencher depois>`
+  - **Aceite:** testes em `tests/test_conversao_cambio.py` (5 casos:
+    conversão com taxa disponível na data exata, conversão com taxa
+    ausente usando último dia útil anterior — despesa e-004 em sábado
+    18/07 cai para a taxa de 17/07 —, moeda BRL não é convertida, moeda
+    ausente é tratada como BRL, conversão em USD também funciona).
+  - **Commit:** `feat(T-016): converte moeda estrangeira com fallback de dia util (RN-016, RN-017)`
 
 - [ ] **T-017** — Integrar política externa, representação, exclusão por centro de custo e câmbio no pipeline `processar_despesas`.
   - **Atende:** RN-013 a RN-017 (orquestração)
@@ -153,6 +156,6 @@
 | RN-012 | T-010 | `test_hospedagem_aplica_limite_individual_de_250_reais` |
 | RN-013 | T-013 | `test_politica_externa.py` (6 casos) |
 | RN-014 | T-014 | `test_representacao.py` (4 casos) |
-| RN-015 | T-015 | *(a definir na implementação)* |
-| RN-016 | T-016 | *(a definir na implementação)* |
-| RN-017 | T-016 | *(a definir na implementação)* |
+| RN-015 | T-015 | `test_categoria_nao_reembolsavel.py` (3 casos) |
+| RN-016 | T-016 | `test_conversao_cambio.py` (5 casos) |
+| RN-017 | T-016 | `test_conversao_cambio.py` (5 casos) |
