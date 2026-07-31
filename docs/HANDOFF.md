@@ -1,6 +1,6 @@
-# Handoff — fim do Dia 1, manhã
+# Handoff — fim do Dia 1, tarde
 
-**Data:** 2026-07-30 · **Próxima sessão:** Dia 1, tarde — implementação
+**Data:** 2026-07-30 · **Próxima sessão:** Dia 2, ~10h — envelope lacrado
 
 > Este arquivo é fino de propósito. O contexto real do projeto vive na `spec.md`,
 > no `plan.md` e no `tasks.md` — se alguma regra de negócio só existir aqui, é
@@ -12,39 +12,42 @@
 
 | Artefato | Estado | Commit |
 |---|---|---|
-| `specs/001-motor-reembolso/spec.md` | 1.0 — RN-001..RN-010, 12 ambiguidades decididas, 18 casos de borda, ordem de aplicação | `a85d821` |
-| `specs/001-motor-reembolso/plan.md` | 1.0 — Python 3.11+/`Decimal`, DT-001..DT-006 | `7d9c222` |
-| `specs/001-motor-reembolso/tasks.md` | T-001..T-022, matriz de cobertura preenchida | `2d36cec` |
-| `CLAUDE.md`, `README.md` | preenchidos | `ac6b65d` |
-| `specs/001-motor-reembolso/DECISIONS.md` | vazio **de propósito** — spec 1.0 é a linha de base | — |
-| `src/`, `tests/` | não existem — a manhã é sem código, por cronograma | — |
-| `docs/sessions/` | 2 sessões exportadas em `.jsonl` cru + `.md` legível | `a355a2c` |
+| `specs/001-motor-reembolso/spec.md` | 1.1 — corrigido RN-006→RN-007 no exemplo da §4 (D-001); §9 com os 10 critérios marcados `[x]` | `bd1f432` |
+| `specs/001-motor-reembolso/tasks.md` | T-001..T-022 concluídas, `[x]`, com hash de commit preenchido em cada uma | ver `git log --grep "T-0"` |
+| `specs/001-motor-reembolso/DECISIONS.md` | D-001 registrado (inconsistência RN-006/RN-007 no exemplo da spec) | `bd1f432` |
+| `src/` | núcleo completo: `motor/modelo.py`, `motor/politica.py`, `motor/regras.py`, `motor/calculadora.py`, `io/carregador.py`, `io/serializador.py`, `cli.py` | — |
+| `tests/` | 94 testes, todos verdes (`pytest -q`) | — |
+| `docs/sessions/` | pendente reexportar a sessão desta tarde ao fechar o terminal | — |
 
-Números de referência já verificados contra `exemplos/despesas-exemplo.json`:
-**total lançado R$ 1.816,84 · total reembolsável R$ 703,43**. Estão fixados como
-critério de aceite na `spec.md` §9 e são o alvo da T-022.
+Critério de aceite da spec §9 confirmado pelo teste ponta a ponta
+(`tests/test_e2e_exemplo_oficial.py`, T-022): sobre
+`exemplos/despesas-exemplo.json`, **total lançado R$ 1.816,84 · total
+reembolsável R$ 703,43**, com `d-003=80.00`, `d-004=0.00`, `d-006=54.90`,
+`d-007=0.00`, `d-010=375.00`, `d-011=33.33`, `d-014=60.00`.
 
-## Pendências que não são código
+Também confirmado manualmente via CLI real:
+`python -m src.cli calcular --input exemplos/despesas-exemplo.json --output resultado.json`
+(arquivo gerado, não commitado — está no `.gitignore`).
 
-1. **Reexportar as sessões ao fechar cada terminal:**
-   `python docs/sessions/_exportar.py`. O `/export` não funciona nesta máquina;
-   usamos a alternativa do `FAQ.md` (cópia dos `.jsonl` de
-   `~/.claude/projects/<slug>/`). Ao acrescentar uma sessão nova, registre o
-   prefixo do UUID no dicionário `ROTULOS` do script.
+## O que mudou na spec durante a implementação
 
-2. **O `RELATORIO.md` precisa explicar o formato das sessões.** O `FAQ.md` exige
-   isso de quem usa a alternativa ao `/export`. O motivo já está em
-   `docs/sessions/README.md`; falta transportar para o relatório no Dia 2.
+**D-001** — o exemplo ilustrativo da spec §4 rotulava as duas decisões de teto
+(`d-001`, `d-002`) com `regras_aplicadas: ["RN-006"]`, mas RN-006 é a regra de
+nota fiscal; a decisão descrita é de teto (RN-007). Corrigido no exemplo antes
+de implementar T-012, para não herdar o erro no código. Ver `DECISIONS.md`.
+Nenhuma outra mudança de spec foi necessária — as 12 ambiguidades decididas na
+manhã se sustentaram sem revisão durante a implementação.
 
-3. **Revisão das decisões de ambiguidade.** As 12 foram decididas na opção A.
-   Sete sub-decisões não estavam cobertas pela letra e foram tomadas junto —
-   estão marcadas abaixo. Elas já vivem na `spec.md`; a pendência é a revisão,
-   não o registro.
+## Pendências que não são código (carregadas do handoff da manhã)
 
-## Sub-decisões tomadas sem escolha explícita
-
-Todas já registradas na spec. Se alguma for revertida, o caminho é
-`spec.md` → entrada no `DECISIONS.md` → tasks afetadas.
+1. **Reexportar as sessões ao fechar o terminal:** `python docs/sessions/_exportar.py`,
+   registrando o prefixo do UUID desta sessão no dicionário `ROTULOS`.
+2. **O `RELATORIO.md` precisa explicar o formato das sessões** (alternativa ao
+   `/export`, motivo em `docs/sessions/README.md`) — ainda não escrito, é
+   trabalho do Dia 2.
+3. **Revisão das decisões de ambiguidade** (as 7 sub-decisões da tabela abaixo,
+   carregada do handoff da manhã) — ainda não revisadas, só implementadas
+   fielmente ao que a spec já dizia.
 
 | Onde | O que foi decidido |
 |---|---|
@@ -56,26 +59,35 @@ Todas já registradas na spec. Se alguma for revertida, o caminho é
 | RN-005 / AMB-010 | Estorno não consome nem devolve teto de nenhuma outra despesa |
 | §10 | Sábado (`d-012`) foi para questões em aberto, não virou ambiguidade |
 
-## Dois pontos que merecem atenção na implementação
+## Decisões de implementação que não estão no `plan.md` (vale registrar se alguém perguntar)
 
-- **`d-010` amplia o próprio teto.** É a hospedagem dela que torna 14/07 uma data
-  de viagem, então sai por R$ 375,00 e não R$ 250,00. É circular, está justificado
-  na RN-009, e é a decisão mais provável de o avaliador questionar.
-- **A RN-008 não é exercitada pelo exemplo oficial.** `d-013` morre na checagem de
-  nota fiscal (passo 7) antes de chegar ao teto (passo 8), então o caso "3 noites"
-  nunca roda. A T-013 precisa de um caso construído à mão, com nota fiscal.
+- **RN-004 (duplicata) é uma fábrica, não uma função direta.** `criar_rn_004_duplicata()`
+  devolve uma função `(Despesa, Contexto) -> Parecer | None` com estado próprio
+  via closure (o conjunto de chaves já vistas), porque é a única regra que
+  precisa saber sobre despesas anteriores na mesma execução. Uma instância nova
+  por chamada de `calcular()` evita estado vazando entre execuções — a
+  calculadora monta a lista de regras (incluindo essa fábrica) a cada chamada.
+- **`d-010` amplia o próprio teto**, confirmado no `test_casos_de_borda`
+  (`RN-008-hospedagem-varias-noites`): uma hospedagem isolada, sozinha na
+  entrada, sai por R$ 375,00 (não R$ 250,00) porque ela mesma torna sua data
+  uma data de viagem. É a mesma matemática de `d-010` no exemplo oficial. O
+  teste unitário de T-013 (`test_rn_008_hospedagem.py`) prova a regra "crua"
+  (sem viagem) construindo um `Contexto` manualmente; o teste de casos de
+  borda prova o comportamento real de ponta a ponta. Os dois são intencionais
+  e não contradizem um ao outro — testam camadas diferentes.
 
 ## Por onde retomar
 
-Próxima task: **T-001** (esqueleto do projeto e harness de teste). Depois a
-Fase 1 inteira, T-001 a T-005, antes de qualquer regra de negócio.
+Sistema base funcionando e testado, pronto para o envelope do Dia 2. Não há
+tasks pendentes da Fase 1 a 4; a Fase 5 (`## Fase 5 — Envelope`) em `tasks.md`
+está vazia, aguardando a mudança de requisito.
 
-Ordem de trabalho a cada task, conforme `CLAUDE.md`:
+Ordem de trabalho ao absorver o envelope, conforme `CLAUDE.md` e `DESAFIO.md`:
 
-1. Ler a task no `tasks.md` e a RN correspondente na `spec.md`.
-2. Escrever o teste do critério de aceite — `test(T-00X)`.
-3. Implementar até passar — `feat(T-00X)`.
-4. Marcar `[x]` na task e preencher o hash no campo **Commit**.
+1. Registrar o gatilho e a mudança em `DECISIONS.md` **antes** de tocar em código.
+2. Editar `spec.md` (e `plan.md` se a mudança for de arquitetura).
+3. Criar as tasks novas em `tasks.md` a partir de T-023 — não renumerar as antigas.
+4. Só então código: teste (`test(T-02X)`) antes ou junto do `feat(T-02X)`.
 
 Se aparecer uma regra de negócio que não está na `spec.md`, **pare** — é bug de
 spec, e o conserto é na spec antes do código.
