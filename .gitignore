@@ -44,3 +44,6 @@ obj/
 # Claude Code — configuracao local de maquina.
 # ATENCAO: CLAUDE.md NAO entra aqui. Ele e artefato entregavel e deve ser commitado.
 .claude/settings.local.json
+
+# Saida gerada pela CLI (README.md, CLAUDE.md) — nao e artefato do repositorio.
+resultado.json
