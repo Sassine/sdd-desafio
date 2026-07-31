@@ -99,17 +99,17 @@ a ordem de aplicação da spec §8.
 - [x] **T-016** — Tabela de casos de borda da spec §7 como teste parametrizado, uma linha por caso
   - **Atende:** `spec.md` §7 (18 linhas)
   - **Aceite:** `test_casos_de_borda` — 18 casos passam, cada um identificado pelo ID da regra no parâmetro
-  - **Commit:** `pendente`
+  - **Commit:** `11fadb7`
 
 - [x] **T-017** — Fronteiras testadas dos dois lados: R$ 100,00/R$ 100,01 e R$ 60,00/R$ 60,01
   - **Atende:** RN-006, RN-007, `plan.md` §6
   - **Aceite:** `test_fronteiras_inclusivas_e_exclusivas` — os quatro casos passam com os valores da spec
-  - **Commit:** `pendente`
+  - **Commit:** `ab7c6ce`
 
 - [x] **T-018** — Lista de despesas vazia produz resultado válido com todos os totais em `0.00`
   - **Atende:** `spec.md` §7 (última linha)
   - **Aceite:** `test_lista_vazia_produz_resultado_valido` — saída bem formada, sem exceção
-  - **Commit:** `pendente`
+  - **Commit:** `8c88711`
 
 ## Fase 4 — Saída e CLI
 
