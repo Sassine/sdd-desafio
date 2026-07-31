@@ -118,10 +118,10 @@ a ordem de aplicação da spec §8.
   - **Aceite:** `test_serializa_valores_como_texto_de_duas_casas` — `Decimal("60")` sai como `"60.00"`; nenhum `Decimal` cru chega ao `json.dump`
   - **Commit:** `pendente`
 
-- [ ] **T-020** — Resumo: totais lançado, reembolsável e glosado, mais contagem por status
+- [x] **T-020** — Resumo: totais lançado, reembolsável e glosado, mais contagem por status
   - **Atende:** `spec.md` §4, §9 (penúltimo critério)
   - **Aceite:** `test_soma_dos_itens_bate_com_o_resumo` — a soma dos `valor_reembolsavel` dos itens é idêntica a `resumo.total_reembolsavel`
-  - **Commit:**
+  - **Commit:** `pendente`
 
 - [ ] **T-021** — CLI: `calcular --input <arquivo> --output <arquivo>`
   - **Atende:** contrato fixo do `DESAFIO.md`
