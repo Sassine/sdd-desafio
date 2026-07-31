@@ -631,7 +631,9 @@ def processar_despesas_v4(
             motivo = "limite_diario_excedido"
             justificativa = "A despesa excedeu o limite diário permitido para a categoria."
 
-        consumo_por_chave[chave] = consumo_por_chave.get(chave, Decimal("0.00")) + reembolsavel
+        consumo_por_chave[chave] = (
+            consumo_por_chave.get(chave, Decimal("0.00")) + reembolsavel
+)
 
         resultado_despesas.append(
             {
@@ -646,7 +648,23 @@ def processar_despesas_v4(
             }
         )
 
+    for despesa in despesas_sem_cambio:
+        resultado_despesas.append(
+            {
+                "id": despesa.id,
+                "categoria": despesa.categoria,
+                "status": "recusada",
+                "valor_original": despesa.valor_original,
+                "valor_reembolsavel": Decimal("0.00"),
+                "valor_nao_reembolsavel": Decimal("0.00"),
+                "motivo": "cambio_indisponivel",
+                "justificativa": "Não há cotação de câmbio disponível para a moeda desta despesa.",
+            }
+        )
+
     valor_total_despesas = sum((item["valor_original"] for item in resultado_despesas), Decimal("0.00"))
+    valor_reembolsavel = sum((item["valor_reembolsavel"] for item in resultado_despesas), Decimal("0.00"))
+    valor_nao_reembolsavel = sum((item["valor_nao_reembolsavel"] for item in resultado_despesas), Decimal("0.00"))
     valor_reembolsavel = sum((item["valor_reembolsavel"] for item in resultado_despesas), Decimal("0.00"))
     valor_nao_reembolsavel = sum((item["valor_nao_reembolsavel"] for item in resultado_despesas), Decimal("0.00"))
 
