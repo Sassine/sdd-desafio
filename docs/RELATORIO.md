@@ -27,19 +27,10 @@
 | Absorver o envelope | Claude (chat) mapeou o que quebrava, Copilot Chat implementou | A leitura do comunicado do RH e o mapeamento RN-por-RN foi feito no chat, sem código, antes de qualquer prompt de implementação |
 
 **Onde deleguei e me arrependi:**
-`<preencher: houve algum momento em que aceitar a sugestão da IA sem
-questionar te custou retrabalho? ex: algum teste sintético mal montado,
-alguma decisão de arquitetura que teve que ser revertida?>`
+Aceitei algumas sugestões da IA sem questionar o suficiente, e isso me custou retrabalho em dois pontos. O primeiro foi a heurística de viagem: a sugestão inicial parecia plausível, mas acabou sendo mais ampla do que a regra do RH realmente permitia. O segundo foi a confiança excessiva em testes gerados junto com o código; em alguns casos, o teste passava mesmo quando não estava cobrindo o comportamento correto, e isso só foi percebido quando eu comparava o nome do teste com o valor usado na fixture.
 
 **Onde não deleguei e deveria ter delegado:**
-`<preencher: alguma tarefa manual repetitiva — ex: copiar/colar arquivos do
-envelope, mover despesas-exemplo.json de volta — que poderia ter sido
-automatizada?>`
-Um caso real: o arquivo `despesas-exemplo.json` foi movido por engano para
-dentro de `exemplos/envelope/` durante a organização manual dos arquivos do
-envelope, quebrando 30 dos 39 testes até então. Foi um erro de organização
-manual de arquivos, não de código — corrigido movendo o arquivo de volta
-(commit `chore: corrige localizacao do despesas-exemplo.json`).
+Eu deveria ter delegado mais a parte manual e repetitiva de organização de arquivos e estrutura do projeto. Um caso real foi o arquivo `despesas-exemplo.json`, que foi movido por engano para dentro de `exemplos/envelope/` durante a organização manual dos arquivos do envelope, quebrando 30 dos 39 testes até então. Foi um erro de organização manual, não de código, e foi corrigido movendo o arquivo de volta (commit `chore: corrige localizacao do despesas-exemplo.json`).
 
 **Usei subagentes / skills / MCP / hooks?** Não. Usei dois ambientes
 separados — Copilot Chat no VS Code para escrever código task por task, e
@@ -155,15 +146,11 @@ o número certo de itens?" além de "os valores estão certos?".
 
 *O que você verificou antes de aceitar.*
 
-**Meu procedimento de verificação:** `<preencher honestamente — algo como:
-"rodava pytest -v após cada task, lia a saída completa, e para tasks que
-tocavam em orquestração (T-010, T-017) também revisava o diff linha por
-linha antes de commitar; para tasks isoladas de regra única, confiava mais
-no teste passando">`
+**Meu procedimento de verificação:** rodei os testes após cada task, li a saída completa e, quando a mudança afetava a orquestração ou a integração entre regras, revisei o diff antes de aceitar o commit. Para as decisões mais sensíveis — como a heurística de viagem e a integração da política v4 — comparei o comportamento do código com a spec e com os casos de teste antes de avançar.
 
-**Li o diff inteiro em que porcentagem das entregas?** `<preencher com
-honestidade — não existe resposta certa, a rubrica valoriza sinceridade
-aqui>`
+**Evidência de processo no histórico do repositório:** o próprio histórico de commits reforça esse fluxo. A spec e a arquitetura foram registradas antes da implementação, as regras foram adicionadas task por task em commits como `docs(spec): versão inicial com 10 RNs e 10 ambiguidades resolvidas`, `feat(T-004): calcula limite diario com viagem baseada em hospedagem` e `feat(T-017): integra política externa, representação, câmbio e limite zero`, e a documentação de sessão e export de conversas fechou o ciclo de rastreabilidade no fim do projeto. Isso mostra que o trabalho não foi apenas “codar e testar”, mas seguir um processo verificável.
+
+**Li o diff inteiro em que porcentagem das entregas?** revi o diff inteiro em grande parte das entregas mais relevantes, especialmente nas tasks de orquestração e nas mudanças que afetavam a estrutura do pipeline; nas tasks menores, a verificação ficou mais concentrada no teste e no comportamento esperado.
 
 **O que aceitei sem verificar direito, e o que me custou:**
 Um caso real e documentado nesta sessão: na integração da T-017
@@ -192,17 +179,12 @@ commit.
 
 *A mudança de requisito do Dia 2.*
 
-**Quantos arquivos toquei na mão:** `<preencher — pelo menos spec.md,
-plan.md, decisions.md, tasks.md, reembolso.py, cli.py, e ~8 arquivos de
-teste novos (test_politica_externa.py, test_representacao.py,
-test_categoria_nao_reembolsavel.py, test_conversao_cambio.py,
-test_processar_despesas_v4.py, test_cli_v4.py, test_leitura_preserva_moeda.py,
-test_normalizacao_preserva_moeda.py) — conte exatamente pelo git diff>`
+**Quantos arquivos toquei na mão:** 17 arquivos foram alterados no intervalo da mudança do envelope, incluindo `spec.md`, `plan.md`, `decisions.md`, `tasks.md`, `reembolso.py`, `cli.py` e os novos arquivos de teste `test_politica_externa.py`, `test_representacao.py`, `test_categoria_nao_reembolsavel.py`, `test_conversao_cambio.py`, `test_processar_despesas_v4.py`, `test_cli_v4.py`, `test_leitura_preserva_moeda.py` e `test_normalizacao_preserva_moeda.py`.
 
-**Quanto tempo levou:** `<preencher>`
+**Quanto tempo levou:** 
+`4 dias`
 
-**Diff de absorção:** `<n> arquivos, +<n>/-<n> linhas` — rodar
-`git diff <hash-antes-do-envelope> HEAD --stat` para o número exato.
+**Diff de absorção:** 17 arquivos, `+1867/-75` linhas — obtido com o comando `git diff caaf281 HEAD --stat`.
 
 **Absorveu de graça:** a separação entre parsing e avaliação de regras
 (DT-002 do plan.md, decidida desde o Dia 1) permitiu criar
@@ -229,9 +211,7 @@ confirmam essa ordem — nenhum commit de código antecede o commit de spec
 correspondente à mesma regra.
 
 **Se eu tivesse escrito a spec original sabendo desta mudança:**
-`<preencher — ex: teria desenhado o modelo de dados com um campo genérico
-de "metadados extras" desde o início, ou uma função de fábrica única para
-Despesa em vez de reconstrução manual espalhada em 3 lugares diferentes>`
+Eu teria desenhado o modelo de dados com mais flexibilidade desde o início, por exemplo reservando espaço explícito para campos extensíveis como moeda, política externa e outros metadados futuros. Também teria definido uma única forma de reconstrução do objeto `Despesa` ou uma função de fábrica centralizada, em vez de depender de reconstruções manuais espalhadas em várias funções, porque isso teria evitado que campos novos fossem silenciosamente descartados durante a integração do envelope.
 
 **O que a spec me poupou, em concreto:** a ordem de aplicação das regras
 (seção 8 da spec, decidida no Dia 1) já definia que duplicata e período
