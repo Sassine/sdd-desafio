@@ -42,5 +42,5 @@ bin/
 obj/
 
 # Claude Code — configuracao local de maquina.
-# ATENCAO: CLAUDE.md NAO entra aqui. Ele e artefato entregavel e deve ser commitado.
+# ATENCAO: COPILOT-INSTRUCTIONS.md NAO entra aqui. Ele e artefato entregavel e deve ser commitado.
 .claude/settings.local.json
