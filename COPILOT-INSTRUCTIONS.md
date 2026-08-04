@@ -1,49 +1,42 @@
 # COPILOT-INSTRUCTIONS.md
 
-> Este arquivo é lido pelo Copilot no início de toda sessão. É onde moram as
-> convenções que você não quer repetir em todo prompt.
-> Substitua os `<...>` e apague o que não usar. Mantenha curto — COPILOT-INSTRUCTIONS.md longo
-> é COPILOT-INSTRUCTIONS.md ignorado.
-
 ## O projeto
 
-Motor de cálculo de reembolso de despesas corporativas. CLI que lê um JSON de
-despesas e emite um JSON com o valor reembolsável e a justificativa de cada item.
+Motor de cálculo de reembolso de despesas corporativas. O fluxo principal é uma CLI em Python que lê um JSON de despesas e gera um JSON com status, valor reembolsável e motivo por item.
 
 ## Fonte da verdade
 
-`specs/001-motor-reembolso/spec.md` define **o que** o sistema faz.
-`specs/001-motor-reembolso/plan.md` define **como**.
-`specs/001-motor-reembolso/tasks.md` define **em que ordem**.
+- `specs/001-motor-reembolso/spec.md` define o que o sistema faz.
+- `specs/001-motor-reembolso/plan.md` define como a solução é organizada.
+- `specs/001-motor-reembolso/tasks.md` define a ordem de execução.
+- `specs/001-motor-reembolso/DECISIONS.md` registra mudanças e ambiguidades resolvidas.
 
-Quando o código e a spec discordarem, a spec está certa e o código é o bug —
-a menos que a spec esteja errada, e nesse caso corrigimos a spec primeiro e
-registramos em `DECISIONS.md`.
+Quando código e spec discordarem, a spec está certa e o código é o bug; se a spec estiver errada, corrigimos a spec primeiro e registramos a decisão.
 
-**Antes de implementar qualquer coisa, leia a task correspondente em `tasks.md`.**
-Se o que eu pedi não está coberto por nenhuma task, me avise em vez de implementar.
+Antes de implementar qualquer coisa, leia a task correspondente em `tasks.md`.
+Se o que foi pedido não estiver coberto por uma task, avise antes de implementar.
 
 ## Regras de trabalho
 
 - Toda regra de negócio vive na spec, não no chat e não em comentário de código.
-- Se eu te explicar uma regra que não está na spec, **pare e me diga isso** antes
-  de escrever código. Isso é um bug de spec.
-- Todo commit referencia uma task: `feat(T-003): <descrição>`.
-  Mudanças de documentação: `docs(spec):`, `docs(plan):`, `docs(tasks):`.
-- Nenhuma regra de negócio entra sem teste.
+- Se uma regra for explicada fora da spec, pare e informe antes de escrever código.
+- Mudanças de código devem ter teste. Nenhuma regra de negócio entra sem teste.
+- Mudanças de documentação usam prefixos `docs(spec):`, `docs(plan):` ou `docs(tasks):`.
 
 ## Stack e comandos
 
-- Linguagem: `<...>`
-- Rodar: `<comando>`
-- Testes: `<comando>`
-- Lint/format: `<comando>`
+- Linguagem: Python 3
+- Rodar: `python src/reembolso.py --input <arquivo> --output <saida>`
+- Testes: `python -m pytest -q`
+- CLI de exemplo: `python src/reembolso.py --input exemplos/despesas-exemplo.json --output resultado.json`
 
 ## Convenções de código
 
-- `<nomenclatura, estrutura de pastas, tratamento de erro, o que for relevante>`
-- Valores monetários: `<como são representados — decimal, centavos em inteiro, etc.>`
+- Preserve a separação entre regras de negócio e I/O.
+- Use `Decimal` para valores monetários e arredonde para duas casas decimais.
+- Não invente novas regras fora da spec; se algo for ambíguo, registre na spec e nas decisões.
 
 ## Fora de escopo
 
-- `<o que este projeto explicitamente não faz — evita que o agente invente feature>`
+- Não implementar fila de aprovação manual, workflow de gestor ou persistência de estado.
+- Não alterar a estrutura do JSON de saída sem ajustar a spec e os testes.

@@ -63,7 +63,7 @@
 
 ## Fase 4 — Saída e CLI
 
-- [ ] **T-010** — Expor a saída final em formato JSON com status, valor reembolsável e motivo por item
+- [ ] **T-010** — Expor a saída final em formato JSON com status, valor reembolsável, data e motivo por item
   - **Atende:** seção 4 da spec, critérios de aceite
   - **Aceite:** O teste `test_saida_json_contem_status_valor_e_motivo` passa.
   - **Commit:**
@@ -77,9 +77,19 @@
 
 ## Fase 5 — Envelope (criar no Dia 2)
 
-- [ ] **T-012** — Ajustar a implementação para a mudança de requisito do envelope lacrado
-  - **Atende:** mudança do Dia 2
-  - **Aceite:** O teste correspondente à nova regra do envelope passa.
+- [ ] **T-012** — Ajustar a implementação para carregar a política externa por centro de custo
+  - **Atende:** RN-010, AMB-010
+  - **Aceite:** O teste `test_politica_externa_por_centro_de_custo` passa.
+  - **Commit:**
+
+- [ ] **T-013** — Implementar regras especiais por centro de custo para `representacao` e `hospedagem`
+  - **Atende:** RN-011, AMB-010
+  - **Aceite:** O teste `test_regras_especiais_por_centro_de_custo` passa.
+  - **Commit:**
+
+- [ ] **T-014** — Converter despesas em moeda estrangeira usando a taxa da data da despesa
+  - **Atende:** RN-012, AMB-011
+  - **Aceite:** O teste `test_conversao_em_moeda_estrangeira_pela_data_da_despesa` passa.
   - **Commit:**
 
 ---
@@ -96,10 +106,13 @@ exatamente a matriz que a correção vai montar.
 | RN-003 | T-007 | `test_limite_diario_eh_compartilhado_entre_despesas_do_mesmo_dia` |
 | RN-004 | T-008 | `test_despesa_acima_do_limite_reembolsa_apenas_o_limite` |
 | RN-005 | T-005 | `test_despesa_acima_de_100_sem_nota_fiscal_eh_recusada` |
-| RN-006 | T-011 | `test_limite_basico_eh_aplicado_sem_campo_de_viagem` |
+| RN-006 | T-011 | `test_dias_com_hospedagem_recebem_limite_aumentado_em_50_porcento` |
 | RN-007 | T-009 | `test_duplicata_eh_markada_como_nao_reembolsavel` |
 | RN-008 | T-006 | `test_valor_negativo_eh_ignorado` |
 | RN-009 | T-001 | `test_carrega_entrada_e_normaliza_categorias` |
+| RN-010 | T-012 | `test_politica_externa_por_centro_de_custo` |
+| RN-011 | T-013 | `test_regras_especiais_por_centro_de_custo` |
+| RN-012 | T-014 | `test_conversao_em_moeda_estrangeira_pela_data_da_despesa` |
 | AMB-001 | T-007 | `test_limite_diario_eh_compartilhado_entre_despesas_do_mesmo_dia` |
 | AMB-002 | T-008 | `test_despesa_acima_do_limite_reembolsa_apenas_o_limite` |
 | AMB-003 | T-005 | `test_despesa_acima_de_100_sem_nota_fiscal_eh_recusada` |

@@ -111,6 +111,37 @@ def test_limite_diario_eh_compartilhado_entre_despesas_do_mesmo_dia():
     assert by_id["d-b"]["valor_reembolsavel"] == 20.0
 
 
+def test_dias_com_hospedagem_recebem_limite_aumentado_em_50_porcento():
+    payload = load_example()
+    payload["colaborador"]["centro_custo"] = "CC-ADM"
+    payload["despesas"] = [
+        {
+            "id": "d-alim",
+            "data": "2026-07-03",
+            "categoria": "alimentacao",
+            "descricao": "Almoco de viagem",
+            "fornecedor": "Restaurante",
+            "valor": 70.0,
+            "tem_nota_fiscal": True,
+        },
+        {
+            "id": "d-hotel",
+            "data": "2026-07-03",
+            "categoria": "hospedagem",
+            "descricao": "Hotel",
+            "fornecedor": "Hotel do Centro",
+            "valor": 200.0,
+            "tem_nota_fiscal": True,
+        },
+    ]
+
+    result = evaluate_expenses(payload)
+    by_id = {item["id"]: item for item in result["itens"]}
+
+    assert by_id["d-alim"]["valor_reembolsavel"] == 70.0
+    assert by_id["d-hotel"]["valor_reembolsavel"] == 200.0
+
+
 def test_despesa_acima_do_limite_reembolsa_apenas_o_limite():
     payload = load_example()
     payload["despesas"] = [
@@ -161,6 +192,42 @@ def test_duplicata_eh_markada_como_nao_reembolsavel():
     assert by_id["d-a"]["status"] == "reembolsado"
     assert by_id["d-b"]["status"] == "nao_reembolsavel"
     assert "duplicata" in by_id["d-b"]["motivo"]
+
+
+def test_politica_externa_por_centro_de_custo():
+    payload = json.loads(Path("exemplos/envelope/despesas-envelope.json").read_text(encoding="utf-8"))
+    policy_path = Path("exemplos/envelope/politica-v4.json")
+    cambio_path = Path("exemplos/envelope/cambio.json")
+
+    result = evaluate_expenses(payload, policy_path=policy_path, cambio_path=cambio_path)
+    item = next(item for item in result["itens"] if item["id"] == "e-001")
+
+    assert item["valor_reembolsavel"] == 300.0
+
+
+def test_regras_especiais_por_centro_de_custo():
+    payload = json.loads(Path("exemplos/envelope/despesas-envelope-cc-desconhecido.json").read_text(encoding="utf-8"))
+    payload["colaborador"]["centro_custo"] = "CC-ENG-PLATAFORMA"
+    policy_path = Path("exemplos/envelope/politica-v4.json")
+    cambio_path = Path("exemplos/envelope/cambio.json")
+
+    result = evaluate_expenses(payload, policy_path=policy_path, cambio_path=cambio_path)
+    by_id = {item["id"]: item for item in result["itens"]}
+
+    assert by_id["f-002"]["status"] == "nao_reembolsavel"
+    assert by_id["f-004"]["status"] == "reembolsado"
+
+
+def test_conversao_em_moeda_estrangeira_pela_data_da_despesa():
+    payload = json.loads(Path("exemplos/envelope/despesas-envelope.json").read_text(encoding="utf-8"))
+    policy_path = Path("exemplos/envelope/politica-v4.json")
+    cambio_path = Path("exemplos/envelope/cambio.json")
+
+    result = evaluate_expenses(payload, policy_path=policy_path, cambio_path=cambio_path)
+    item = next(item for item in result["itens"] if item["id"] == "e-002")
+
+    assert item["valor_original"] == 130.46
+    assert item["valor_reembolsavel"] == 90.0
 
 
 def test_saida_json_contem_status_valor_e_motivo(tmp_path):

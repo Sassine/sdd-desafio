@@ -6,7 +6,7 @@
 2. Execute o comando abaixo na raiz do projeto:
 
 ```bash
-python src/reembolso.py calcular --input exemplos/despesas-exemplo.json --output resultado.json
+python src/reembolso.py --input exemplos/despesas-exemplo.json --output resultado.json
 ```
 
 ## Como testar

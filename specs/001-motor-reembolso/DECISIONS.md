@@ -10,33 +10,32 @@ Ordem cronológica inversa: a mais recente primeiro.
 
 ---
 
-## D-002 — <título curto> · `<data>`
+## D-003 — Política por centro de custo e fallback padrão · 2026-08-03
 
-**Gatilho:** <o que provocou: envelope lacrado / erro descoberto na implementação /
-ambiguidade que só apareceu ao testar / o Claude apontou uma contradição>
+**Gatilho:** envelope lacrado com mudança da política de reembolso v4.
 
-**O que mudou na spec:** <de → para, citando o ID da regra>
+**O que mudou na spec:** a spec passou a definir que os limites são determinados pelo centro de custo do colaborador e lidos de uma política externa (`politica-v4.json`); quando o centro não existe, aplica-se a política padrão (RN-010). A regra também passou a tratar a categoria `representacao` para `CC-COMERCIAL` e a não reembolso de `hospedagem` para `CC-ENG-PLATAFORMA` (RN-011).
 
-**Por quê:**
+**Por quê:** a política v4 deixou de ser única para toda a empresa e passou a variar por centro de custo.
 
-**O que isso invalidou:** <requisitos, decisões técnicas, testes que caíram>
+**O que isso invalidou:** a hipótese anterior de limites globais e constantes no código; as tarefas que assumiam um único conjunto de limites passaram a precisar de reavaliação.
 
-**Tasks afetadas:** <as que precisaram ser refeitas + as novas criadas>
+**Tasks afetadas:** T-012 e T-013 foram criadas para cobrir a nova política externa e as regras especiais por centro de custo.
 
-**Custo:** <quantos arquivos tocados, quanto tempo>
+**Custo:** a mudança afeta a camada de regras de negócio e a futura implementação, mas não exige reescrever o fluxo completo de entrada e saída.
 
 ---
 
-## D-001 — <título curto> · `<data>`
+## D-004 — Conversão cambial pela data da despesa · 2026-08-03
 
-**Gatilho:**
+**Gatilho:** envelope lacrado com a introdução de despesas internacionais e câmbio externo.
 
-**O que mudou na spec:**
+**O que mudou na spec:** a spec passou a exigir conversão de despesas em moeda estrangeira para BRL usando a taxa da data da despesa, lida de `cambio.json` (RN-012). Também foi definida a decisão de fallback quando não houver taxa disponível para a data.
 
-**Por quê:**
+**Por quê:** a política v4 passou a tratar despesas internacionais e a conversão precisa ser feita antes da comparação com os limites.
 
-**O que isso invalidou:**
+**O que isso invalidou:** a premissa anterior de que todas as despesas estariam em BRL e poderiam ser comparadas diretamente aos limites.
 
-**Tasks afetadas:**
+**Tasks afetadas:** T-014 foi criada para cobrir a conversão cambial e o fallback de taxa ausente.
 
-**Custo:**
+**Custo:** alterou a regra de avaliação monetária e exige expansão da camada de cálculo para aceitar moedas diferentes de BRL.

@@ -32,7 +32,7 @@ entrada JSON → carregador → motor de regras → estrutura de saída → arqu
 As estruturas internas serão pequenas e explícitas:
 
 - `DespesaInput`: representa os dados recebidos na entrada, incluindo categoria, valor, data, nota fiscal e identificador.
-- `DespesaResultado`: representa a decisão final da despesa, contendo `id`, `status`, `valor_original`, `valor_reembolsavel`, `motivo` e `categoria`.
+- `DespesaResultado`: representa a decisão final da despesa, contendo `id`, `data`, `status`, `valor_original`, `valor_reembolsavel`, `motivo` e `categoria`.
 - `Resumo`: agrega os totais de valor original, valor reembolsável e quantidade de itens processados.
 - `Processamento`: encapsula a lista de resultados e o resumo final.
 

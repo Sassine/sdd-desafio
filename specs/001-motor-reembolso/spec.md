@@ -1,6 +1,6 @@
 # Spec — Motor de Cálculo de Reembolso
 
-**Versão:** 1.1 · **Status:** em desenvolvimento · **Última alteração:** 2026-07-30
+**Versão:** 1.2 · **Status:** em desenvolvimento · **Última alteração:** 2026-08-03
 
 > **Regra de ouro deste arquivo:** ele descreve o QUÊ e o PORQUÊ. Nenhuma linha
 > aqui pode citar linguagem, biblioteca, classe, função ou estrutura de pasta.
@@ -35,6 +35,7 @@ Quando o sistema processa um conjunto de despesas, ele deve indicar, para cada i
 |---|---|---|---|
 | colaborador.id | texto | Identificador do colaborador | sim |
 | colaborador.nome | texto | Nome do colaborador | sim |
+| colaborador.centro_custo | texto | Centro de custo do colaborador | sim |
 | periodo.competencia | texto | Mês de competência no formato `AAAA-MM` | sim |
 | periodo.inicio | data | Início do período de competência | sim |
 | periodo.fim | data | Fim do período de competência | sim |
@@ -45,7 +46,10 @@ Quando o sistema processa um conjunto de despesas, ele deve indicar, para cada i
 | despesas[].descricao | texto | Descrição da despesa | sim |
 | despesas[].fornecedor | texto | Nome do fornecedor | sim |
 | despesas[].valor | número | Valor monetário da despesa | sim |
+| despesas[].moeda | texto | Moeda da despesa em ISO 4217; se ausente, assume-se `BRL` | não |
 | despesas[].tem_nota_fiscal | booleano | Indica se há nota fiscal | sim |
+
+Além disso, a política de limites por centro de custo é lida de um arquivo externo (`politica-v4.json`) e as taxas de câmbio vêm de outro arquivo externo (`cambio.json`).
 
 **Saída:** a saída deve conter o conjunto de despesas processadas e a decisão de cada uma. O formato mínimo é:
 
@@ -132,6 +136,24 @@ Cada regra recebe um ID (`RN-001`, `RN-002`, ...). As tasks vão referenciar ess
 **Origem:** decisão explícita do sistema para o exemplo de entrada
 **Aceite:** Uma despesa com categoria `ALIMENTACAO` deve ser tratada como `alimentacao`.
 
+### RN-010 — Política por centro de custo
+
+**Regra:** Os limites aplicáveis dependem do centro de custo do colaborador e devem ser lidos de uma política externa, não codificada no motor. Se o centro de custo não existir na política externa, aplica-se a política padrão.
+**Origem:** comunicado do RH, item A
+**Aceite:** Uma despesa de alimentação processada para `CC-COMERCIAL` deve usar os limites definidos para esse centro na política externa, e não um limite global fixo.
+
+### RN-011 — Regras especiais por centro de custo
+
+**Regra:** O centro de custo `CC-COMERCIAL` aceita a categoria `representacao` com limite diário de `R$ 300,00`; o centro `CC-ENG-PLATAFORMA` não reembolsa `hospedagem` de forma alguma.
+**Origem:** comunicado do RH, item A
+**Aceite:** Uma despesa de `representacao` em `CC-COMERCIAL` deve ser reembolsável até `R$ 300,00` por dia, enquanto uma despesa de `hospedagem` em `CC-ENG-PLATAFORMA` deve ser `nao_reembolsavel`.
+
+### RN-012 — Conversão de moeda estrangeira
+
+**Regra:** Quando a despesa traz uma moeda diferente de `BRL`, o valor deve ser convertido para BRL usando a taxa da data da despesa, lida do arquivo externo de câmbio. A conversão ocorre antes da comparação com os limites e a saída continua representando o valor em BRL.
+**Origem:** comunicado do RH, item B
+**Aceite:** Uma despesa em moeda estrangeira deve ser comparada ao limite da política em BRL após a conversão, e não com o valor original na moeda externa.
+
 ---
 
 ## 6. Ambiguidades identificadas e decisões
@@ -211,6 +233,22 @@ Cada regra recebe um ID (`RN-001`, `RN-002`, ...). As tasks vão referenciar ess
 **Justificativa:** Isso torna o sistema mais robusto sem depender de padronização manual da entrada.
 **Regra afetada:** RN-009
 
+### AMB-010 — O que significa "política padrão"
+
+**Texto original do RH:** "Alguns centros de custo não têm entrada na tabela. Nesse caso, aplica-se a política padrão."
+**O que não está claro:** a política padrão pode ser interpretada de várias formas.
+**Decisão:** A política padrão é a política base do sistema, com os limites históricos da v3 para alimentação, transporte urbano e hospedagem, sem a categoria `representacao`.
+**Justificativa:** Isso mantém a regra determinística e evita depender de uma tabela invisível para centros desconhecidos.
+**Regra afetada:** RN-010
+
+### AMB-011 — Como lidar com falta de taxa de câmbio para a data da despesa
+
+**Texto original do RH:** "A conversão usa a taxa da data da despesa"
+**O que não está claro:** o que fazer se a data da despesa não tiver taxa disponível no arquivo externo.
+**Decisão:** O sistema usa a taxa mais recente anterior à data da despesa; se não houver nenhuma taxa anterior, a despesa é marcada como `nao_reembolsavel` com motivo `taxa_cambio_indisponivel`.
+**Justificativa:** Isso preserva uma regra determinística sem depender da data atual do processamento.
+**Regra afetada:** RN-012
+
 ---
 
 ## 7. Casos de borda
@@ -225,6 +263,10 @@ Cada regra recebe um ID (`RN-001`, `RN-002`, ...). As tasks vão referenciar ess
 | Despesa duplicada | mesma data, fornecedor, valor, categoria e descrição | a segunda ocorrência é recusada | RN-007 |
 | Valor negativo | `-45.00` | é ignorada para fins de reembolso | RN-008 |
 | Categoria fora da política | `coworking` | é recusada | RN-001 |
+| Centro de custo desconhecido | centro não listado na política externa | usa a política padrão | RN-010 |
+| `representacao` para `CC-COMERCIAL` | categoria `representacao` com limite diário de `R$ 300,00` | é aceita até o limite específico do centro | RN-011 |
+| `hospedagem` para `CC-ENG-PLATAFORMA` | categoria `hospedagem` | é recusada | RN-011 |
+| Moeda estrangeira | `EUR` com taxa da data da despesa | é convertida para BRL antes da comparação com o limite | RN-012 |
 
 ## 8. Ordem de aplicação das regras
 
@@ -234,17 +276,19 @@ As regras devem ser aplicadas na seguinte ordem para que o resultado seja determ
 2. Identificar valores menores ou iguais a zero e ignorá-los.
 3. Validar se a despesa está dentro do período de competência.
 4. Validar se a categoria é aceitada.
-5. Detectar duplicatas e rejeitar a segunda ocorrência.
-6. Validar a obrigatoriedade de nota fiscal quando o valor for superior a `R$ 100,00`.
-7. Identificar se o dia é de viagem a partir da presença de hospedagem associada.
-8. Aplicar o limite diário por categoria, ampliado em 50% quando houver viagem, e calcular o valor reembolsável parcial, quando necessário.
+5. Resolver a política aplicável com base no centro de custo do colaborador, lendo a política externa e aplicando a política padrão quando necessário.
+6. Converter a despesa para BRL quando a moeda for diferente de `BRL`, usando a taxa da data da despesa.
+7. Detectar duplicatas e rejeitar a segunda ocorrência.
+8. Validar a obrigatoriedade de nota fiscal quando o valor for superior a `R$ 100,00`.
+9. Identificar se o dia é de viagem a partir da presença de hospedagem associada.
+10. Aplicar o limite diário por categoria, ampliado em 50% quando houver viagem, e calcular o valor reembolsável parcial, quando necessário.
 
 ## 9. Critérios de aceite
 
 O sistema está pronto quando:
 
 - [ ] Para o exemplo de entrada fornecido, cada despesa recebe um status explícito de `reembolsado`, `reembolsado_parcialmente` ou `nao_reembolsavel`.
-- [ ] O valor reembolsável de cada item é consistente com as regras de limite, nota fiscal, competência e duplicata.
+- [ ] O valor reembolsável de cada item é consistente com as regras de limite, nota fiscal, competência, duplicata, política por centro de custo e conversão cambial.
 - [ ] A saída inclui, para cada item, pelo menos: `id`, `status`, `valor_original`, `valor_reembolsavel` e `motivo`.
 - [ ] A implementação respeita a ordem de aplicação das regras descrita nesta spec.
 - [ ] A spec é suficiente para que uma pessoa sem ler o código possa verificar se a decisão de cada despesa está correta.
