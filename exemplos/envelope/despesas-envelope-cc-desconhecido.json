@@ -1,0 +1,52 @@
+{
+  "colaborador": {
+    "id": "c-1103",
+    "nome": "Dani Okonkwo",
+    "centro_custo": "CC-SUPORTE-N2"
+  },
+  "periodo": {
+    "competencia": "2026-07",
+    "inicio": "2026-07-01",
+    "fim": "2026-07-31"
+  },
+  "despesas": [
+    {
+      "id": "f-001",
+      "data": "2026-07-16",
+      "categoria": "alimentacao",
+      "descricao": "Almoco",
+      "fornecedor": "Padaria Uniao",
+      "valor": 58.00,
+      "tem_nota_fiscal": true
+    },
+    {
+      "id": "f-002",
+      "data": "2026-07-17",
+      "categoria": "hospedagem",
+      "descricao": "Pousada - 1 diaria",
+      "fornecedor": "Pousada do Vale",
+      "valor": 310.00,
+      "tem_nota_fiscal": true
+    },
+    {
+      "id": "f-003",
+      "data": "2026-07-17",
+      "categoria": "representacao",
+      "descricao": "Jantar com fornecedor",
+      "fornecedor": "Casa Trindade",
+      "valor": 190.00,
+      "moeda": "BRL",
+      "tem_nota_fiscal": true
+    },
+    {
+      "id": "f-004",
+      "data": "2026-07-21",
+      "categoria": "transporte_urbano",
+      "descricao": "Corrida",
+      "fornecedor": "TaxiApp",
+      "valor": 12.00,
+      "moeda": "USD",
+      "tem_nota_fiscal": true
+    }
+  ]
+}

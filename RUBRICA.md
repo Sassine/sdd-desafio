@@ -102,7 +102,7 @@ Casos ocultos do instrutor exercitam as mesmas oito ambiguidades com valores dif
 |---|---|
 | Regra de negócio que só existe no chat, nunca na spec | −5 por ocorrência, teto −15 |
 | `DECISIONS.md` ausente tendo havido mudança de spec | −5 |
-| `CLAUDE.md` ausente | −3 |
+| `COPILOT-INSTRUCTIONS.md` ausente | −3 |
 | README não permite rodar o projeto | −3 |
 | Repositório sem histórico (commit único "initial commit") | −15, e o critério 2 fica limitado a 8 |
 

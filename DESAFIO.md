@@ -78,7 +78,7 @@ Um repositório Git com esta estrutura:
 
 ```
 seu-repo/
-├── CLAUDE.md                     # convenções do projeto para o agente
+├── COPILOT-INSTRUCTIONS.md      # convenções do projeto para o agente
 ├── README.md                     # como rodar e como testar
 ├── specs/
 │   └── 001-motor-reembolso/
